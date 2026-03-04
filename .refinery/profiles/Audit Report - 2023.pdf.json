@@ -1,0 +1,15 @@
+{
+  "doc_id": "Audit Report - 2023.pdf",
+  "filename": "Audit Report - 2023.pdf",
+  "origin_type": "scanned_image",
+  "layout_complexity": "single_column",
+  "language": "en",
+  "language_confidence": 1.0,
+  "domain_hint": "financial",
+  "estimated_cost": "needs_vision_model",
+  "metadata": {
+    "avg_char_density": "0.000003",
+    "avg_image_ratio": "0.989644",
+    "total_pages": 95
+  }
+}

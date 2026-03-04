@@ -1,0 +1,15 @@
+{
+  "doc_id": "fta_performance_survey_final_report_2022.pdf",
+  "filename": "fta_performance_survey_final_report_2022.pdf",
+  "origin_type": "native_digital",
+  "layout_complexity": "multi_column",
+  "language": "en",
+  "language_confidence": 1.0,
+  "domain_hint": "financial",
+  "estimated_cost": "needs_layout_model",
+  "metadata": {
+    "avg_char_density": "0.003344",
+    "avg_image_ratio": "0.082592",
+    "total_pages": 155
+  }
+}
