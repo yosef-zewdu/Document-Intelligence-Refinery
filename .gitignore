@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+
+# Virtual Environment
+.venv/
+
+
+# Environment Variables
+.env
+
+# IDEs
+.vscode/
+
+# files
+*.pdf
