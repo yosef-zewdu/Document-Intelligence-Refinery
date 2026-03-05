@@ -5,6 +5,7 @@ from .types import (
     ExtractionCost,
     DocumentProfile,
     ExtractedDocument,
+    ConfidenceMetadata,
     LDU,
     PageIndex,
     ProvenanceChain,

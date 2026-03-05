@@ -1,0 +1,101 @@
+# Refinery Pipeline Configuration
+# ------------------------------
+# This file centralizes all tunable parameters for the 5-stage pipeline.
+# Changing these values will update the pipeline behavior without code edits.
+
+# Stage 1 & 2: Triage and Routing
+triage:
+  # Probabilistic thresholds for document classification
+  thresholds:
+    scanned_density_max: 0.0005    # Max char density to be considered a scan
+    digital_density_min: 0.0010    # Min char density to be considered native digital
+    multi_column_x_offsets: 10     # Min unique x-starts per page to flag as multi-column
+    table_heavy_word_ratio: 0.4    # Ratio of words in tables (heuristic)
+    
+  # Domain Keyword Weighted Lists
+  # Used by the TriageAgent to classify document domain (domain_hint)
+  domain_keywords:
+    financial:
+      stems:
+        "financi\\w*": 3
+        "audit\\w*": 5
+        "fiscal": 5
+        "tax\\w*": 4
+        "revenue": 3
+        "balance\\s+sheet": 5
+        "expenditure": 4
+        "invoic\\w*": 3
+        "account\\w*": 3
+        "econom\\w*": 2
+        "statement": 2
+        "profit": 3
+        "loss": 2
+        "budget": 3
+      confidence_threshold: 5
+
+    legal:
+      stems:
+        "\\blaw\\w*": 3
+        "agreement": 4
+        "contract": 5
+        "court": 5
+        "legal\\w*": 3
+        "statut\\w*": 5
+        "provision": 2
+        "jurisdiction": 4
+        "liability": 3
+        "clause": 4
+        "regulation": 3
+        "compliance": 2
+        "policy": 1
+      confidence_threshold: 5
+
+    technical:
+      stems:
+        "system": 1
+        "architect\\w*": 4
+        "technical": 3
+        "complexit\\w*": 2
+        "specification": 4
+        "software": 5
+        "hardwar\\w*": 5
+        "algorithm": 5
+        "deployment": 3
+        "protocol": 4
+        "engineer\\w*": 3
+        "data": 1
+      confidence_threshold: 5
+
+    medical:
+      stems:
+        "patient": 5
+        "medical": 3
+        "health": 2
+        "clinical": 5
+        "diagnosis": 5
+        "treatment": 3
+        "hospital": 4
+        "physician": 5
+        "pharmaceut\\w*": 5
+      confidence_threshold: 5
+
+# Stage 2: Extraction Strategy Rules
+extraction:
+  escalation:
+    strategy_a_threshold: 0.50     # If confidence < 0.5, escalate from FastText to Layout
+    strategy_b_threshold: 0.70     # If confidence < 0.7, flag for human/VLM review
+    
+  vision_extractor:
+    model_name: "Qwen/Qwen2.5-VL-7B-Instruct"
+    budget_cap_usd: 5.0
+    est_cost_per_page_usd: 0.03
+    max_pages_per_doc: 12
+    confidence_accept: 0.80
+
+# Stage 3: Semantic Chunking Engine
+chunking:
+  max_tokens: 512
+  overlap_tokens: 50
+  split_on_headers: true
+  split_on_tables: true
+  min_chunk_size: 100
