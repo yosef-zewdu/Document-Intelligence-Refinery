@@ -1,0 +1,15 @@
+{
+  "doc_id": "CBE ANNUAL REPORT 2023-24.pdf",
+  "filename": "CBE ANNUAL REPORT 2023-24.pdf",
+  "origin_type": "native_digital",
+  "layout_complexity": "multi_column",
+  "language": "en",
+  "language_confidence": 1.0,
+  "domain_hint": "general",
+  "estimated_cost": "needs_layout_model",
+  "metadata": {
+    "avg_char_density": "0.003972",
+    "avg_image_ratio": "0.108402",
+    "total_pages": 161
+  }
+}
