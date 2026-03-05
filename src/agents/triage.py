@@ -89,22 +89,55 @@ class TriageAgent:
             )
 
     def _detect_domain(self, pages) -> DomainHint:
+        import re
         text = ""
         for page in pages:
             text += (page.extract_text() or "").lower()
             
-        keywords = {
-            DomainHint.FINANCIAL: ["report", "financial", "audit", "balance", "revenue", "fiscal", "tax"],
-            DomainHint.LEGAL: ["law", "agreement", "contract", "court", "legal", "article"],
-            DomainHint.TECHNICAL: ["system", "architecture", "technical", "manual", "specification"],
-            DomainHint.MEDICAL: ["patient", "medical", "health", "clinical", "diagnosis"]
+        # Weighted scoring system using stems and variations
+        domain_scores = {
+            DomainHint.FINANCIAL: {
+                r"financi\w*": 3, r"audit\w*": 5, r"fiscal": 5, r"tax\w*": 4, 
+                r"revenue": 3, r"balance\s+sheet": 5, r"expenditure": 4, 
+                r"invoic\w*": 3, r"account\w*": 3, r"econom\w*": 2, 
+                r"statement": 2, r"profit": 3, r"loss": 2, r"budget": 3
+            },
+            DomainHint.LEGAL: {
+                r"\blaw\w*": 3, r"agreement": 4, r"contract": 5, r"court": 5, 
+                r"legal\w*": 3, r"statut\w*": 5, r"provision": 2, 
+                r"jurisdiction": 4, r"liability": 3, r"clause": 4,
+                r"regulation": 3, r"compliance": 2, r"policy": 1
+            },
+            DomainHint.TECHNICAL: {
+                r"system": 1, r"architect\w*": 4, r"technical": 3, 
+                r"complexit\w*": 2, r"specification": 4, r"software": 5, 
+                r"hardwar\w*": 5, r"algorithm": 5, r"deployment": 3, 
+                r"protocol": 4, r"engineer\w*": 3, r"data": 1
+            },
+            DomainHint.MEDICAL: {
+                r"patient": 5, r"medical": 3, r"health": 2, 
+                r"clinical": 5, r"diagnosis": 5, r"treatment": 3, 
+                r"hospital": 4, r"physician": 5, r"pharmaceut\w*": 5
+            }
         }
         
-        for domain, keys in keywords.items():
-            if any(key in text for key in keys):
-                return domain
-                
-        return DomainHint.GENERAL
+        scores = {domain: 0 for domain in domain_scores}
+        
+        for domain, keywords in domain_scores.items():
+            for pattern, weight in keywords.items():
+                matches = re.findall(pattern, text)
+                scores[domain] += len(matches) * weight
+        
+        if not any(scores.values()):
+            return DomainHint.GENERAL
+            
+        best_domain = max(scores, key=scores.get)
+        
+        # Confidence threshold
+        if scores[best_domain] < 5:
+            return DomainHint.GENERAL
+            
+        return best_domain
 
 if __name__ == "__main__":
     triage = TriageAgent()
