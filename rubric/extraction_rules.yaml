@@ -1,0 +1,23 @@
+# Extraction thresholds and rules for the Refinery
+
+triage:
+  scanned_density_max: 0.0005
+  digital_density_min: 0.001
+  multi_column_heuristic: 10 # average unique x-starts per page
+
+escalation:
+  confidence_threshold: 0.5
+  auto_escalate_scanned: true
+
+chunking:
+  max_tokens: 512
+  rules:
+    preserve_table_cells: true
+    preserve_figure_captions: true
+    keep_numbered_lists: true
+    store_section_headers: true
+    resolve_cross_references: true
+
+cost_guards:
+  vision_budget_cap_usd: 5.0
+  per_doc_max_usd: 1.0
