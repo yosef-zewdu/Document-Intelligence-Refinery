@@ -9,7 +9,7 @@ triage:
   thresholds:
     scanned_density_max: 0.0005    # Max char density to be considered a scan
     digital_density_min: 0.0010    # Min char density to be considered native digital
-    multi_column_x_offsets: 10     # Min unique x-starts per page to flag as multi-column
+    multi_column_x_offsets: 200  # Min unique x-starts per page to flag as multi-column
     table_heavy_word_ratio: 0.4    # Ratio of words in tables (heuristic)
     
   # Domain Keyword Weighted Lists
@@ -17,14 +17,14 @@ triage:
   domain_keywords:
     financial:
       stems:
-        "financi\\w*": 3
+        "financial\\w*": 3
         "audit\\w*": 5
         "fiscal": 5
         "tax\\w*": 4
         "revenue": 3
         "balance\\s+sheet": 5
         "expenditure": 4
-        "invoic\\w*": 3
+        "invoice\\w*": 3
         "account\\w*": 3
         "econom\\w*": 2
         "statement": 2

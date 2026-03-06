@@ -8,8 +8,11 @@ from src.models import (
     DomainHint, 
     ExtractionCost
 )
-
+import logging
 from src.utils.config_loader import load_refinery_config
+
+# Define the logger for this file
+logger = logging.getLogger(__name__)
 
 class TriageAgent:
     def __init__(self, config: Dict[str, Any] = None):
@@ -22,7 +25,7 @@ class TriageAgent:
         self.thresholds = self.config.get("thresholds", {
             "scanned_density_max": 0.0005,
             "digital_density_min": 0.001,
-            "multi_column_x_offsets": 10,
+            "multi_column_x_offsets": 200,
             "table_heavy_word_ratio": 0.4
         })
         self.domain_keywords = self.config.get("domain_keywords", {})
@@ -72,7 +75,7 @@ class TriageAgent:
                     
                 # 2. Determine Layout Complexity
                 avg_x_offsets = sum(max_x_offsets) / total_pages
-                if avg_x_offsets > self.thresholds.get("multi_column_x_offsets", 10):
+                if avg_x_offsets > self.thresholds.get("multi_column_x_offsets", 200):
                     layout_complexity = LayoutComplexity.MULTI_COLUMN
                 else:
                     layout_complexity = LayoutComplexity.SINGLE_COLUMN
@@ -148,24 +151,3 @@ class TriageAgent:
             return DomainHint.GENERAL
             
         return DomainHint(best_key)
-
-if __name__ == "__main__":
-    triage = TriageAgent()
-    docs = [
-        "data/CBE ANNUAL REPORT 2023-24.pdf",
-        "data/Audit Report - 2023.pdf",
-        "data/fta_performance_survey_final_report_2022.pdf",
-        "data/tax_expenditure_ethiopia_2021_22.pdf"
-    ]
-    
-    for doc in docs:
-        if os.path.exists(doc):
-            profile = triage.classify(doc)
-            print(f"Profile for {doc}:")
-            print(profile.model_dump_json(indent=2))
-            
-            # Save to .refinery/profiles
-            os.makedirs(".refinery/profiles", exist_ok=True)
-            output_path = f".refinery/profiles/{os.path.basename(doc)}.json"
-            with open(output_path, "w") as f:
-                f.write(profile.model_dump_json(indent=2))
