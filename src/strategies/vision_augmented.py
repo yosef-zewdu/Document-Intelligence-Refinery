@@ -10,7 +10,15 @@ from huggingface_hub import InferenceClient
 from typing import List, Dict, Any, Optional, Tuple
 
 from .base import BaseExtractor
-from src.models import ExtractedDocument, TextBlock, TableStructure, DocumentProfile, BBox
+from src.models import (
+    ExtractedDocument, 
+    TextBlock, 
+    TableStructure, 
+    DocumentProfile, 
+    BBox,
+    ConfidenceMetadata
+)
+from src.utils.config_loader import load_refinery_config
 
 # Try to load .env from project root
 env_path = Path(__file__).parents[2] / ".env"
@@ -25,20 +33,28 @@ class VisionExtractor(BaseExtractor):
 
     def __init__(
         self,
-        model_name: str = "Qwen/Qwen2.5-VL-7B-Instruct",
-        budget_cap_usd: float = 5.0,
-        est_cost_per_page_usd: float = 0.03,
-        max_pages_per_doc: int = 12,
-        confidence_accept: float = 0.80,
+        config: Dict[str, Any] = None,
+        # Legacy defaults for local overrides
+        model_name: str = None,
+        budget_cap_usd: float = None,
+        est_cost_per_page_usd: float = None,
+        max_pages_per_doc: int = None,
+        confidence_accept: float = None,
     ):
-        self.model_name = model_name
-        self.budget_cap = budget_cap_usd
+        if not config:
+            full_config = load_refinery_config()
+            self.config = full_config.get("extraction", {}).get("vision_extractor", {})
+        else:
+            self.config = config
+
+        # Priority: explicit args > config file > hardcoded defaults
+        self.model_name = model_name or self.config.get("model_name", "Qwen/Qwen2.5-VL-7B-Instruct")
+        self.budget_cap = budget_cap_usd or self.config.get("budget_cap_usd", 5.0)
         self.current_spend = 0.0
 
-        # rough cost model (tune once you know your provider pricing)
-        self.est_cost_per_page = est_cost_per_page_usd
-        self.max_pages_per_doc = max_pages_per_doc
-        self.confidence_accept = confidence_accept
+        self.est_cost_per_page = est_cost_per_page_usd or self.config.get("est_cost_per_page_usd", 0.03)
+        self.max_pages_per_doc = max_pages_per_doc or self.config.get("max_pages_per_doc", 12)
+        self.confidence_accept = confidence_accept or self.config.get("confidence_accept", 0.80)
 
     # ---------- page selection ----------
     def _choose_pages(self, profile: DocumentProfile) -> List[int]:
@@ -118,8 +134,9 @@ class VisionExtractor(BaseExtractor):
             f"This is a {domain_hint} document page. "
             "Extract all text contents and tables. "
             "Return the data strictly in JSON format with the following keys:\n"
-            "- 'blocks': list of objects with a 'content' field (string)\n"
-            "- 'tables': list of objects with 'headers' (list of strings) and 'rows' (list of list of strings)\n"
+            "- 'blocks': list of objects with a 'content' field (string) and a 'bbox' field (list of 4 floats: [x0, y0, x1, y1] for coordinates)\n"
+            "- 'tables': list of objects with 'headers' (list of strings), 'rows' (list of list of strings), and 'bbox' (list of 4 floats)\n"
+            "If bounding boxes are unknown, use [0.0, 0.0, 0.0, 0.0]. "
             "Do not include any chat or preamble, only the raw JSON."
         )
 
@@ -158,13 +175,14 @@ class VisionExtractor(BaseExtractor):
         """Provides realistic mock data for verification."""
         return {
             "blocks": [
-                {"content": f"Sample text from page {page_num_0 + 1}"},
-                {"content": f"This document appears to be related to {domain_hint}."},
+                {"content": f"Sample text from page {page_num_0 + 1}", "bbox": [10.0, 10.0, 200.0, 40.0]},
+                {"content": f"This document appears to be related to {domain_hint}.", "bbox": [10.0, 50.0, 250.0, 80.0]},
             ],
             "tables": [
                 {
                     "headers": ["ID", "Summary", "Value"],
-                    "rows": [["1", "Item A", "100.00"], ["2", "Item B", "200.00"]]
+                    "rows": [["1", "Item A", "100.00"], ["2", "Item B", "200.00"]],
+                    "bbox": [10.0, 100.0, 300.0, 200.0]
                 }
             ],
             "notes": {"mocked": True}
@@ -247,6 +265,8 @@ class VisionExtractor(BaseExtractor):
         t0 = time.time()
         blocks: List[TextBlock] = []
         tables: List[TableStructure] = []
+        warnings = []
+        signals = {}
 
         page_confidences: Dict[int, float] = {}
         parse_ok_pages = 0
@@ -258,47 +278,68 @@ class VisionExtractor(BaseExtractor):
         for page_i, img in zip(page_indices, images):
             img_b64 = self._img_to_b64(img)
 
-            # Call VLM (you connect this)
-            raw = self._call_vlm(img_b64, page_num_0=page_i, domain_hint=str(profile.domain_hint.value))
-            parsed, ok = self._safe_parse_output(raw)
-            if ok:
-                parse_ok_pages += 1
-
-            # Compute confidence for this page
-            c = self._compute_page_confidence(parsed)
-            page_confidences[page_i] = round(c, 4)
-
-            # Convert parsed -> your models
-            for b in (parsed.get("blocks") or []):
-                if isinstance(b, dict):
-                    txt = (b.get("content") or "").strip()
+            try:
+                # Call VLM (you connect this)
+                raw = self._call_vlm(img_b64, page_num_0=page_i, domain_hint=str(profile.domain_hint.value))
+                parsed, ok = self._safe_parse_output(raw)
+                if ok:
+                    parse_ok_pages += 1
                 else:
-                    txt = str(b).strip()
-                    
-                if not txt:
-                    continue
+                    warnings.append(f"Failed to parse VLM response for page {page_i+1}")
 
-                # bbox is usually not available from VLM; do not fake it
-                # but your TextBlock requires bbox. We provide 0 bbox AND mark as unknown in metadata later.
-                blocks.append(TextBlock(
-                    content=txt,
-                    bbox=BBox(x0=0.0, y0=0.0, x1=0.0, y1=0.0),
-                    page_num=page_i + 1  # choose consistent indexing; adjust if you standardize to 0-based
-                ))
+                # Compute confidence for this page
+                c = self._compute_page_confidence(parsed)
+                page_confidences[page_i] = round(c, 4)
 
-            for t in (parsed.get("tables") or []):
-                headers = [str(x) for x in (t.get("headers") or [])]
-                rows = [[str(cell) if cell is not None else "" for cell in row] for row in (t.get("rows") or [])]
+                # Convert parsed -> your models
+                for b in (parsed.get("blocks") or []):
+                    if isinstance(b, dict):
+                        txt = str(b.get("content", "")).strip()
+                        bbox_list = b.get("bbox", [0.0, 0.0, 0.0, 0.0])
+                    else:
+                        txt = str(b).strip()
+                        bbox_list = [0.0, 0.0, 0.0, 0.0]
 
-                if not headers and not rows:
-                    continue
+                    if not txt:
+                        continue
 
-                tables.append(TableStructure(
-                    headers=headers,
-                    rows=rows,
-                    bbox=None,  # tables allow Optional bbox in your model
-                    page_num=page_i + 1
-                ))
+                    try:
+                        parsed_bbox = BBox(x0=float(bbox_list[0]), y0=float(bbox_list[1]), 
+                                           x1=float(bbox_list[2]), y1=float(bbox_list[3]))
+                    except (IndexError, ValueError, TypeError):
+                        parsed_bbox = BBox(x0=0.0, y0=0.0, x1=0.0, y1=0.0)
+
+                    blocks.append(TextBlock(
+                        content=txt,
+                        bbox=parsed_bbox,
+                        page_num=page_i + 1  # 1-based indexing for pages
+                    ))
+
+                for t in (parsed.get("tables") or []):
+                    headers = [str(x) for x in (t.get("headers") or [])]
+                    rows = [[str(cell) if cell is not None else "" for cell in row] for row in (t.get("rows") or [])]
+                    bbox_list = t.get("bbox", [0.0, 0.0, 0.0, 0.0]) if isinstance(t, dict) else [0.0, 0.0, 0.0, 0.0]
+
+                    if not headers and not rows:
+                        continue
+
+                    try:
+                        parsed_bbox = BBox(x0=float(bbox_list[0]), y0=float(bbox_list[1]), 
+                                           x1=float(bbox_list[2]), y1=float(bbox_list[3]))
+                        # If table parser returns valid looking BBox
+                        if parsed_bbox.x0 == 0.0 and parsed_bbox.x1 == 0.0:
+                            parsed_bbox = None
+                    except (IndexError, ValueError, TypeError):
+                        parsed_bbox = None
+
+                    tables.append(TableStructure(
+                        headers=headers,
+                        rows=rows,
+                        bbox=parsed_bbox,
+                        page_num=page_i + 1
+                    ))
+            except Exception as e:
+                warnings.append(f"Error on page {page_i+1}: {str(e)}")
 
             # Spend accounting per page
             self.current_spend += self.est_cost_per_page
@@ -312,7 +353,23 @@ class VisionExtractor(BaseExtractor):
             avg_c = 0.0
 
         parse_ratio = parse_ok_pages / max(len(page_indices), 1)
-        overall_conf = max(0.0, min(1.0, avg_c * (0.7 + 0.3 * parse_ratio)))
+        score = max(0.0, min(1.0, avg_c * (0.7 + 0.3 * parse_ratio)))
+        
+        signals = {
+            "page_confidences": page_confidences,
+            "parse_ok_ratio": round(parse_ratio, 4),
+            "spend_usd": round(self.current_spend, 2),
+            "budget_cap_usd": self.budget_cap,
+            "est_cost_per_page_usd": self.est_cost_per_page,
+            "pages_processed_0_based": page_indices,
+        }
+
+        confidence_meta = ConfidenceMetadata(
+            score=round(score, 4),
+            method="vlm_vision",
+            warnings=warnings,
+            signals=signals
+        )
 
         return ExtractedDocument(
             doc_id=profile.doc_id,
@@ -321,22 +378,16 @@ class VisionExtractor(BaseExtractor):
             metadata={
                 "strategy": "VisionExtractor",
                 "model": self.model_name,
-                "pages_processed_0_based": page_indices,
-                "page_confidence": page_confidences,
-                "overall_confidence": round(overall_conf, 4),
-                "parse_ok_ratio": round(parse_ratio, 4),
                 "elapsed_sec": round(elapsed, 3),
-                "cost": {
-                    "est_cost_per_page_usd": self.est_cost_per_page,
-                    "spent_usd": round(self.current_spend, 2),
-                    "budget_cap_usd": self.budget_cap,
-                },
                 "provenance": {
                     "bbox_available": False,
                     "bbox_note": "VLM output lacks reliable bbox; page-level provenance only unless paired with OCR/layout tool.",
                 },
-            }
+            },
+            confidence=confidence_meta
         )
 
     def get_confidence_score(self, extracted: ExtractedDocument) -> float:
-        return float(extracted.metadata.get("overall_confidence", 0.0))
+        if extracted.confidence:
+            return extracted.confidence.score
+        return 0.0

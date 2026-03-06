@@ -106,49 +106,50 @@ def analyze_document_with_docling(pdf_path):
     pipeline_options = PdfPipelineOptions()
     pipeline_options.generate_picture_images = True  # Required for charts/images
     pipeline_options.images_scale = 2.0  
-    converter = DocumentConverter(format_options={InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options, image_ref_mode=ImageRefMode.EMBEDDED)})
+    
+    # Define image save path
+    image_dir = os.path.join(".refinery/exploration", f"{os.path.basename(pdf_path)}_images")
+    os.makedirs(image_dir, exist_ok=True)
+    
+    converter = DocumentConverter(
+        format_options={
+            InputFormat.PDF: PdfFormatOption(
+                pipeline_options=pipeline_options,
+                image_ref_mode=ImageRefMode.EMBEDDED # Try embedded first
+            )
+        }
+    )
     result = converter.convert(pdf_path)
-    # Extract structural metadata from Docling result
     doc = result.document
     md = doc.export_to_markdown()
 
-    # 1. Origin Type: Since Docling usually performs OCR automatically, 
-    # we check if the extracted text count is suspicious relative to the page count,
-    # or rely on the metadata if available.
+    # 1. Origin Type
     is_scanned = len(doc.texts) < 5 * len(doc.pages)
     origin_type = "image_heavy_or_scanned" if is_scanned else "native_digital"
 
-    # 2. Layout Complexity: Ratio-based logic
-    table_ratio = len(doc.tables) / len(doc.pages.values()) if len(doc.pages.values()) > 0 else 0
-    picture_ratio = len(doc.pictures) / len(doc.pages.values()) if len(doc.pages.values()) > 0 else 0
+    # 2. Layout Complexity
+    table_ratio = len(doc.tables) / len(doc.pages) if len(doc.pages) > 0 else 0
+    picture_ratio = len(doc.pictures) / len(doc.pages) if len(doc.pages) > 0 else 0
     
     layout_complexity = "mixed"
     if table_ratio > 0.5: layout_complexity = "table_heavy"
     elif picture_ratio > 0.5: layout_complexity = "figure_heavy"
-    # Note: Column detection usually requires checking bounding boxes of text elements
 
-    # 3. Language & Domain Hint
-    # Docling often extracts language in metadata, but we'll use a safe check
-    origin_meta = getattr(doc, "origin", None)
-    detected_lang = "unknown"
-    if origin_meta and hasattr(origin_meta, "metadata") and "language" in origin_meta.metadata:
-        detected_lang = origin_meta.metadata["language"]
-    
-    # Simple keyword-based Domain Hint
+    # 3. Language & Domain Hint: Already detected by fallback above
+    # Simplified Domain Hint (based on text preview)
     text_sample = " ".join([t.text for t in doc.texts[:20]]).lower()
     domain_hint = "general"
     if any(k in text_sample for k in ["tax", "expenditure", "revenue", "fiscal", "report", "audit"]):
         domain_hint = "financial"
     elif any(k in text_sample for k in ["article", "regulation", "law", "decree", "contract", "agreement"]):
         domain_hint = "legal"
-
+    
     # 4. Estimated Extraction Cost
     cost_est = "fast_text_sufficient"
     if is_scanned or table_ratio > 0.3:
         cost_est = "needs_layout_model"
     if len(doc.pictures) > 5:
         cost_est = "needs_vision_model"
-
 
     return {
         "filename": os.path.basename(pdf_path),
@@ -157,7 +158,6 @@ def analyze_document_with_docling(pdf_path):
         "num_pictures": len(doc.pictures) if hasattr(doc, 'pictures') and isinstance(doc.pictures, list) else 0,
         "origin_type": origin_type,
         "layout_complexity": layout_complexity,
-        "language": detected_lang,
         "domain_hint": domain_hint,
         "estimated_extraction_cost": cost_est,
     } , md
@@ -167,8 +167,8 @@ if __name__ == "__main__":
         # "data/CBE ANNUAL REPORT 2023-24.pdf",
         # "data/Audit Report - 2023.pdf",
         # "data/fta_performance_survey_final_report_2022.pdf",
-        "data/tax_expenditure_ethiopia_2021_22.pdf",
-        # "data/interim_report.pdf"
+        # "data/tax_expenditure_ethiopia_2021_22.pdf",
+        "data/interim_report.pdf"
     ]
     
     os.makedirs(".refinery/exploration", exist_ok=True)
@@ -191,8 +191,8 @@ if __name__ == "__main__":
         # docling analysis (optional)
         try:
             docling_results = analyze_document_with_docling(doc)
-            docling_json = f".refinery/exploration/{os.path.basename(doc)}_docling.json"
-            docling_md = f".refinery/exploration/{os.path.basename(doc)}_docling.md"
+            docling_json = f".refinery/exploration/{os.path.basename(doc)}_1_docling.json"
+            docling_md = f".refinery/exploration/{os.path.basename(doc)}_1_docling.md"
             with open(docling_json, "w") as f:
                 json.dump(docling_results[0], f, indent=2)
             with open(docling_md, "w") as f:

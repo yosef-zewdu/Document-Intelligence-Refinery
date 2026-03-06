@@ -26,7 +26,7 @@ def delivery_challenge_profile():
     )
 
 def test_fast_text_confidence(fast_extractor, delivery_challenge_profile):
-    pdf_path = "data/Delivery Challenge Week 2.pdf"
+    pdf_path = "tests/test_data/Delivery Challenge Week 2.pdf"
     if not os.path.exists(pdf_path):
         pytest.skip(f"{pdf_path} not found")
         
@@ -35,7 +35,7 @@ def test_fast_text_confidence(fast_extractor, delivery_challenge_profile):
     assert confidence > 0.9 # Should be high for native digital text
 
 def test_fast_text_extraction(fast_extractor, delivery_challenge_profile):
-    pdf_path = "data/Delivery Challenge Week 2.pdf"
+    pdf_path = "tests/test_data/Delivery Challenge Week 2.pdf"
     if not os.path.exists(pdf_path):
         pytest.skip(f"{pdf_path} not found")
         
@@ -51,7 +51,7 @@ def test_fast_text_extraction(fast_extractor, delivery_challenge_profile):
 
 def test_fast_text_scanned_confidence(fast_extractor, delivery_challenge_profile):
     # A scanned PDF should have significantly lower confidence
-    pdf_path = "data/Audit Report - 2023.pdf"
+    pdf_path = "tests/test_data/Audit Report - 2023.pdf"
     if not os.path.exists(pdf_path):
         pytest.skip(f"{pdf_path} not found")
         
