@@ -134,8 +134,9 @@ class VisionExtractor(BaseExtractor):
             f"This is a {domain_hint} document page. "
             "Extract all text contents and tables. "
             "Return the data strictly in JSON format with the following keys:\n"
-            "- 'blocks': list of objects with a 'content' field (string)\n"
-            "- 'tables': list of objects with 'headers' (list of strings) and 'rows' (list of list of strings)\n"
+            "- 'blocks': list of objects with a 'content' field (string) and a 'bbox' field (list of 4 floats: [x0, y0, x1, y1] for coordinates)\n"
+            "- 'tables': list of objects with 'headers' (list of strings), 'rows' (list of list of strings), and 'bbox' (list of 4 floats)\n"
+            "If bounding boxes are unknown, use [0.0, 0.0, 0.0, 0.0]. "
             "Do not include any chat or preamble, only the raw JSON."
         )
 
@@ -174,13 +175,14 @@ class VisionExtractor(BaseExtractor):
         """Provides realistic mock data for verification."""
         return {
             "blocks": [
-                {"content": f"Sample text from page {page_num_0 + 1}"},
-                {"content": f"This document appears to be related to {domain_hint}."},
+                {"content": f"Sample text from page {page_num_0 + 1}", "bbox": [10.0, 10.0, 200.0, 40.0]},
+                {"content": f"This document appears to be related to {domain_hint}.", "bbox": [10.0, 50.0, 250.0, 80.0]},
             ],
             "tables": [
                 {
                     "headers": ["ID", "Summary", "Value"],
-                    "rows": [["1", "Item A", "100.00"], ["2", "Item B", "200.00"]]
+                    "rows": [["1", "Item A", "100.00"], ["2", "Item B", "200.00"]],
+                    "bbox": [10.0, 100.0, 300.0, 200.0]
                 }
             ],
             "notes": {"mocked": True}
@@ -291,30 +293,49 @@ class VisionExtractor(BaseExtractor):
 
                 # Convert parsed -> your models
                 for b in (parsed.get("blocks") or []):
-                    txt = str(b.get("content") or b if isinstance(b, dict) else b).strip()
-                        
+                    if isinstance(b, dict):
+                        txt = str(b.get("content", "")).strip()
+                        bbox_list = b.get("bbox", [0.0, 0.0, 0.0, 0.0])
+                    else:
+                        txt = str(b).strip()
+                        bbox_list = [0.0, 0.0, 0.0, 0.0]
+
                     if not txt:
                         continue
 
-                    # bbox is usually not available from VLM; do not fake it
-                    # but your TextBlock requires bbox. We provide 0 bbox AND mark as unknown in metadata later.
+                    try:
+                        parsed_bbox = BBox(x0=float(bbox_list[0]), y0=float(bbox_list[1]), 
+                                           x1=float(bbox_list[2]), y1=float(bbox_list[3]))
+                    except (IndexError, ValueError, TypeError):
+                        parsed_bbox = BBox(x0=0.0, y0=0.0, x1=0.0, y1=0.0)
+
                     blocks.append(TextBlock(
                         content=txt,
-                        bbox=BBox(x0=0.0, y0=0.0, x1=0.0, y1=0.0),
-                        page_num=page_i + 1  # choose consistent indexing; adjust if you standardize to 0-based
+                        bbox=parsed_bbox,
+                        page_num=page_i + 1  # 1-based indexing for pages
                     ))
 
                 for t in (parsed.get("tables") or []):
                     headers = [str(x) for x in (t.get("headers") or [])]
                     rows = [[str(cell) if cell is not None else "" for cell in row] for row in (t.get("rows") or [])]
+                    bbox_list = t.get("bbox", [0.0, 0.0, 0.0, 0.0]) if isinstance(t, dict) else [0.0, 0.0, 0.0, 0.0]
 
                     if not headers and not rows:
                         continue
 
+                    try:
+                        parsed_bbox = BBox(x0=float(bbox_list[0]), y0=float(bbox_list[1]), 
+                                           x1=float(bbox_list[2]), y1=float(bbox_list[3]))
+                        # If table parser returns valid looking BBox
+                        if parsed_bbox.x0 == 0.0 and parsed_bbox.x1 == 0.0:
+                            parsed_bbox = None
+                    except (IndexError, ValueError, TypeError):
+                        parsed_bbox = None
+
                     tables.append(TableStructure(
                         headers=headers,
                         rows=rows,
-                        bbox=None,  # tables allow Optional bbox in your model
+                        bbox=parsed_bbox,
                         page_num=page_i + 1
                     ))
             except Exception as e:
