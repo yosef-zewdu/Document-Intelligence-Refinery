@@ -23,31 +23,65 @@ class LayoutExtractor(BaseExtractor):
     """
 
     def __init__(self, *, min_block_per_page: float = 0.8):
-        self.converter = DocumentConverter()
+        from docling.datamodel.pipeline_options import PdfPipelineOptions
+        from docling.datamodel.base_models import InputFormat
+        from docling.document_converter import PdfFormatOption
+
+        # Ensure layout and table structure models are active
+        pipeline_options = PdfPipelineOptions()
+        pipeline_options.do_table_structure = True
+        pipeline_options.do_ocr = True # Critical for getting bboxes on all text
+        pipeline_options.generate_page_images = True
+        pipeline_options.generate_picture_images = True
+
+        # Correct way to pass options in Docling 2.x
+        self.converter = DocumentConverter(
+            format_options={
+                InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)
+            }
+        )
         self.min_block_per_page = min_block_per_page
 
     # ---------- Provenance helpers ----------
-    def _get_item_prov_bbox(self, item) -> Tuple[int, Optional[BBox], bool]:
-        if not hasattr(item, "prov") or not item.prov:
+    def _get_item_prov_bbox(self, item, doc=None) -> Tuple[int, Optional[BBox], bool]:
+        # In Docling 2, provenance is in item.prov
+        prov = getattr(item, "prov", [])
+        if not prov:
             return 1, None, False
 
-        p = item.prov[0]
+        p = prov[0]
         page_num = getattr(p, "page_no", 1)
 
-        if hasattr(p, "bbox") and p.bbox is not None:
-            b = p.bbox
-            try:
-                 return page_num, BBox(x0=float(b.l), y0=float(b.t), x1=float(b.r), y1=float(b.b)), True
-            except ValueError:
-                 return page_num, None, True
+        # Get bbox from p.bbox (BoundingBox)
+        b = getattr(p, "bbox", None)
+        if b is not None:
+             try:
+                  # docling BBox uses l, t, r, b. 
+                  # Depending on coord_origin, t can be > b. Pydantic requires y1 > y0.
+                  l, t, r, bottom = float(b.l), float(b.t), float(b.r), float(b.b)
+                  return page_num, BBox(
+                      x0=round(min(l, r), 2), 
+                      y0=round(min(t, bottom), 2), 
+                      x1=round(max(l, r), 2), 
+                      y1=round(max(t, bottom), 2)
+                  ), True
+             except (ValueError, AttributeError) as e:
+                  logger.debug(f"BBox mapping failed: {e}")
+                  return page_num, None, True
 
         return page_num, None, True
 
     def _is_table_item(self, item) -> bool:
-        return item.__class__.__name__ == "TableItem" or callable(getattr(item, "export_to_dataframe", None))
+        from docling_core.types.doc.document import TableItem
+        return isinstance(item, TableItem)
+
+    def _is_formula_item(self, item) -> bool:
+        from docling_core.types.doc.document import FormulaItem
+        return isinstance(item, FormulaItem)
 
     def _is_picture_item(self, item) -> bool:
-        return item.__class__.__name__ in ("PictureItem", "ImageItem")
+        from docling_core.types.doc.document import PictureItem
+        return isinstance(item, PictureItem)
 
     # ---------- Public API ----------
     def extract(self, pdf_path: str, profile: DocumentProfile) -> ExtractedDocument:
@@ -76,9 +110,7 @@ class LayoutExtractor(BaseExtractor):
             conversion_ok = True
 
             for item, level in doc.iterate_items():
-                if self._is_picture_item(item):
-                    continue
-
+                # Capture Tables
                 if self._is_table_item(item):
                     try:
                         df = item.export_to_dataframe(doc=doc)
@@ -91,7 +123,7 @@ class LayoutExtractor(BaseExtractor):
                     headers = [str(c) for c in df.columns]
                     rows = [["" if cell is None else str(cell) for cell in row] for row in df.values.tolist()]
 
-                    page_num, bbox, has_prov = self._get_item_prov_bbox(item)
+                    page_num, bbox, has_prov = self._get_item_prov_bbox(item, doc)
                     if bbox is not None:
                         prov_hits += 1
                     else:
@@ -109,17 +141,50 @@ class LayoutExtractor(BaseExtractor):
                         header_nonempty.append(sum(1 for h in headers if h and h.strip()) / max(len(headers), 1))
                     except ValueError as e:
                         warnings.append(f"Invalid table structure: {e}")
-
                     continue
 
+                # Capture Text, Formulas, and Alt-Text from Pictures
                 txt = getattr(item, "text", None)
-                if txt:
-                    txt_norm = " ".join(txt.split())
-                    if not txt_norm:
+                label = ""
+                
+                if self._is_formula_item(item):
+                    label = "[FORMULA]"
+                    txt = txt or "(no formula text)"
+                elif self._is_picture_item(item):
+                    label = "[IMAGE]"
+                    # Pictures often have labels or captions instead of primary text
+                    txt = txt or getattr(item, "caption", None) or "(no caption)"
+
+                if txt is not None:
+                    txt_norm = (f"{label} " if label else "") + " ".join(txt.split())
+                    
+                    # Try to extract and save the actual image if it's a picture or formula
+                    image_path_msg = ""
+                    if label in ("[IMAGE]", "[FORMULA]"):
+                        try:
+                            # docling 2.x method to get image of an item
+                            img = item.get_image(doc)
+                            if img:
+                                import os
+                                img_dir = f".refinery/extracted_images/{profile.doc_id}"
+                                os.makedirs(img_dir, exist_ok=True)
+                                page_no = getattr(item.prov[0], "page_no", 1) if getattr(item, "prov", None) else 1
+                                # Give it a unique name using its id or bounding box hash
+                                safe_name = f"page{page_no}_{abs(hash(txt_norm + str(item))) % 100000}.png"
+                                img_path = os.path.join(img_dir, safe_name)
+                                img.save(img_path)
+                                image_path_msg = f" [Saved Image: {img_path}]"
+                        except Exception as e:
+                            logger.debug(f"Failed to extract image for {label}: {e}")
+                            image_path_msg = f" [Image extraction failed]"
+
+                    txt_norm += image_path_msg
+
+                    if not txt_norm or txt_norm.strip() in ("[IMAGE]", "[FORMULA]"):
                         continue
 
-                    page_num, bbox, has_prov = self._get_item_prov_bbox(item)
-                    if bbox is not None:
+                    page_num, bbox, has_prov = self._get_item_prov_bbox(item, doc)
+                    if bbox is not None and (bbox.x1 - bbox.x0 > 0): # Only count real hits
                         prov_hits += 1
                     else:
                         prov_misses += 1
