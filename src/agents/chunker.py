@@ -14,6 +14,7 @@ import hashlib
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Tuple, Iterable, Union
 
+from collections import defaultdict
 from src.models import ExtractedDocument, TextBlock, TableStructure, LDU, BBox
 
 # ---------------------------
@@ -23,7 +24,14 @@ from src.models import ExtractedDocument, TextBlock, TableStructure, LDU, BBox
 _WS = re.compile(r"\s+")
 IMAGE_RE = re.compile(r"^\[IMAGE\].*?\[Saved Image:\s*(.*?)\]", re.IGNORECASE)
 
-LIST_ITEM_RE = re.compile(r"^\s*(\d+(\.\d+)*[\.\)]|[•\-])\s+")
+LIST_ITEM_RE = re.compile(
+    r"^\s*(" 
+    r"(?:\d+(?:\.\d+)*[\.\)])"          # 1) 1.2) 3.4.5)
+    r"|(?:[ivxlcdm]+[\)\.])"            # i) ii) iv) (roman)
+    r"|(?:[•\-])"                       # bullets
+    r")\s+",
+    re.IGNORECASE
+)
 TABLE_REF_RE = re.compile(r"\bTable\s+(\d+)\b", re.IGNORECASE)
 FIG_REF_RE = re.compile(r"\bFigure\s+(\d+)\b|\bFig\.\s*(\d+)\b", re.IGNORECASE)
 
@@ -96,35 +104,102 @@ def parse_image_path(content: str) -> Optional[str]:
     m = IMAGE_RE.match((content or "").strip())
     return m.group(1).strip() if m else None
 
+HEADING_NUM_RE = re.compile(r"^\s*\d+(\.\d+)*\s+\S+")
+ROMAN_LIST_RE   = re.compile(r"^\s*[ivxlcdm]+[\)\.]\s+", re.IGNORECASE)
+
+KNOWN_HEADINGS = {
+    "PROFILE","VISION","MISSION","MOTTO","VALUES","CONTENTS",
+    "PRESIDENT'S MESSAGE","BOARD OF DIRECTORS","EXECUTIVE MANAGEMENT"
+}
+
 def is_heading_text(text: str) -> bool:
-    """
-    Heuristic heading detector:
-    - relatively short line OR all-caps heavy
-    - not ending with punctuation
-    """
     t = norm_text(text)
     if not t:
         return False
-    if len(t) > 160:
+    if len(t) > 180:
         return False
-    if t.endswith((".", ":", ";", ",")):
+
+    # reject list markers pretending to be headings
+    if ROMAN_LIST_RE.match(t) or LIST_ITEM_RE.match(t):
         return False
-    # All caps (allow digits and punctuation)
+
+    # accept explicit numbering
+    if HEADING_NUM_RE.match(t):
+        return True
+
+    # accept known headings exactly
+    if t.upper() in KNOWN_HEADINGS:
+        return True
+
+    # accept ALL CAPS heavy lines
     alpha = sum(c.isalpha() for c in t)
-    if alpha >= 8:
+    if alpha >= 6:
         upper = sum(c.isupper() for c in t if c.isalpha())
-        if upper / max(alpha, 1) > 0.80:
+        if upper / alpha > 0.88 and len(t.split()) <= 14:
             return True
-    # Title-ish: not too many words, and mostly starts uppercase
-    words = t.split()
-    if 2 <= len(words) <= 12:
-        starts_upper = sum(1 for w in words if w[:1].isupper())
-        if starts_upper / len(words) > 0.6:
-            return True
+
     return False
+
+# def is_heading_text(text: str) -> bool:
+#     """
+#     Heuristic heading detector:
+#     - relatively short line OR all-caps heavy
+#     - not ending with punctuation
+#     """
+#     t = norm_text(text)
+#     if not t:
+#         return False
+#     if len(t) > 160:
+#         return False
+#     if t.endswith((".", ":", ";", ",")):
+#         return False
+#     # All caps (allow digits and punctuation)
+#     alpha = sum(c.isalpha() for c in t)
+#     if alpha >= 8:
+#         upper = sum(c.isupper() for c in t if c.isalpha())
+#         if upper / max(alpha, 1) > 0.80:
+#             return True
+#     # Title-ish: not too many words, and mostly starts uppercase
+#     words = t.split()
+#     if 2 <= len(words) <= 12:
+#         starts_upper = sum(1 for w in words if w[:1].isupper())
+#         if starts_upper / len(words) > 0.6:
+#             return True
+#     return False
 
 def is_list_item(text: str) -> bool:
     return bool(LIST_ITEM_RE.match((text or "").strip()))
+
+def is_list_continuation(text: str) -> bool:
+    t = (text or "").strip()
+    return t.startswith("Â") or t.startswith("•") or t.startswith("-")
+
+def build_running_header_set(doc: ExtractedDocument) -> set:
+    """
+    Detect repeated running headers (e.g., 'COMMERCIAL BANK OF ETHIOPIA ...')
+    that appear on many pages near the top margin. These should NOT become headings.
+    """
+    counts = defaultdict(set)  # text -> set(pages)
+
+    for b in doc.blocks:
+        t = norm_text(b.content)
+        if not t or len(t) > 180:
+            continue
+
+        # only consider all-caps heavy candidates
+        alpha = sum(c.isalpha() for c in t)
+        if alpha < 6:
+            continue
+        upper = sum(c.isupper() for c in t if c.isalpha())
+        if upper / alpha < 0.85:
+            continue
+
+        # top margin heuristic (tune threshold if needed)
+        if b.bbox and getattr(b.bbox, "y0", 0.0) > 740:
+            counts[t].add(b.page_num)
+
+    # repeated across many pages => running header
+    return {txt for txt, pages in counts.items() if len(pages) >= 8}
 
 # ---------------------------
 # Chunk Validator
@@ -183,6 +258,7 @@ class ChunkingEngine:
     def chunk(self, doc: ExtractedDocument) -> List[LDU]:
         # 1) Build per-page item stream (reading-order aware)
         items_by_page = self._build_items_by_page(doc)
+        running_headers = build_running_header_set(doc)
 
         # 2) First pass: produce LDUs with section + list + figure rules
         ldus: List[LDU] = []
@@ -223,7 +299,10 @@ class ChunkingEngine:
                 if it.kind == "text":
                     assert it.content is not None
                     t = norm_text(it.content)
-
+                    
+                    # Suppress repeated running headers
+                    if t in running_headers:
+                        continue
                     # Skip caption blocks that were assigned to an image (Rule 2)
                     caption_blocks = set(
                         self._block_key(b) for b in image_to_caption_block.values() if b is not None
@@ -241,7 +320,7 @@ class ChunkingEngine:
                         ldus.append(self._make_heading_ldu(doc.doc_id, it, section_context))
                         continue
 
-                    # List handling (Rule 3)
+                    # List handling (Rule 3) with continuation support
                     if is_list_item(t):
                         # entering list mode
                         if buffer_text_blocks:
@@ -249,11 +328,16 @@ class ChunkingEngine:
                         buffer_list_blocks.append(it.source)
                         list_mode = True
                         continue
-                    else:
-                        # exiting list mode if needed
-                        if list_mode and buffer_list_blocks:
-                            flush_list_buffer()
-                            list_mode = False
+
+                    # if already in list mode, keep absorbing continuation lines (bullets, Â artifacts)
+                    if list_mode and is_list_continuation(t):
+                        buffer_list_blocks.append(it.source)
+                        continue
+
+                    # leaving list mode if current line is neither new list item nor continuation
+                    if list_mode and buffer_list_blocks:
+                        flush_list_buffer()
+                        list_mode = False
 
                     # Normal paragraph text buffering
                     buffer_text_blocks.append(it.source)
