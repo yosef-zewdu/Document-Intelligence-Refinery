@@ -1,7 +1,9 @@
 from pydantic import BaseModel, Field, field_validator, model_validator
 from typing import List, Optional, Dict, Any, Union
 from enum import Enum
-import hashlib
+import hashlib, json, re
+
+_ws = re.compile(r"\s+")
 
 class OriginType(str, Enum):
     NATIVE_DIGITAL = "native_digital"
@@ -103,20 +105,36 @@ class ExtractedDocument(BaseModel):
 
 class LDU(BaseModel):
     content: str
-    chunk_type: str  # e.g., "text", "table", "figure"
+    chunk_type: str  # e.g., "text", "table", "figure" Literal["text", "table", "figure", "list", "heading"]
     page_refs: List[int]
     bounding_box: Optional[BBox] = None
     parent_section: Optional[str] = None
     token_count: int
-    content_hash: str
+    content_hash: Optional[str] = None
     metadata: Dict[str, Any] = Field(default_factory=dict)
 
-    @model_validator(mode="before")
-    @classmethod
-    def generate_hash(cls, data: Any) -> Any:
-        if isinstance(data, dict) and "content" in data and "content_hash" not in data:
-            data["content_hash"] = hashlib.sha256(data["content"].encode()).hexdigest()
-        return data
+    @model_validator(mode="after")
+    def generate_hash(self):
+        if not getattr(self, "content_hash", None):
+            norm_content = _ws.sub(" ", (self.content or "").strip())
+
+            payload = {
+                # doc_id is ideal if you can provide it in metadata
+                "doc_id": self.metadata.get("doc_id"),
+                "chunk_type": self.chunk_type,
+                "content": norm_content,
+                "page_refs": self.page_refs,
+                "bbox": self.bounding_box.model_dump() if self.bounding_box else None,
+                "parent_section": self.parent_section,
+            }
+
+            blob = json.dumps(payload, sort_keys=True, ensure_ascii=False).encode("utf-8")
+            self.content_hash = "sha256:" + hashlib.sha256(blob).hexdigest()
+
+            # also normalize content to reduce duplicates
+            self.content = norm_content
+
+        return self
 
 class SectionNode(BaseModel):
     title: str

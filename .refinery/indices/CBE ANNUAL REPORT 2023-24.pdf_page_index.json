@@ -1,0 +1,2090 @@
+{
+  "doc_id": "CBE ANNUAL REPORT 2023-24.pdf",
+  "root": {
+    "title": "Document Root",
+    "page_start": 1,
+    "page_end": 161,
+    "summary": "This is the table of contents for the Bank of Shanghai's 2023/24 annual report. It lists the main sections including profile, vision, mission, performance highlights, board of directors, and executive management. The report also contains statements from the president and Shariá Advisory Committee.",
+    "data_types_present": [
+      "figures",
+      "headings",
+      "lists",
+      "tables",
+      "text"
+    ],
+    "child_sections": [
+      {
+        "title": "Preamble",
+        "page_start": 1,
+        "page_end": 1,
+        "summary": "The image shows a group of people standing in front of a building, likely a school or university, based on the architecture. The individuals appear to be students or faculty members, dressed in formal attire, suggesting a special occasion or event. The setting and attire indicate a formal gathering, possibly a graduation ceremony or a significant academic event.",
+        "data_types_present": [
+          "figures"
+        ],
+        "child_sections": [],
+        "key_entities": []
+      },
+      {
+        "title": "ANNUAL REPORT",
+        "page_start": 1,
+        "page_end": 2,
+        "summary": "This appears to be the title page of the Annual Report for 2023/24 from the Bank of Shanghai. The document likely contains financial statements, performance metrics, and other key information about the bank's operations for the fiscal year.",
+        "data_types_present": [
+          "headings",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": []
+      },
+      {
+        "title": "CBEBIRR",
+        "page_start": 2,
+        "page_end": 2,
+        "summary": "The document section titled \"CBEBIRR\" contains only a heading and the word \"FORWARD!\" with no additional content or data types present. The summary provided is simply \"CBEBIRR FORWARD!\"",
+        "data_types_present": [
+          "headings"
+        ],
+        "child_sections": [],
+        "key_entities": []
+      },
+      {
+        "title": "INTERNETBANKING",
+        "page_start": 2,
+        "page_end": 2,
+        "summary": "This section appears to be about internet banking cards, though the content is minimal with only a heading and the word \"Summary:\" present. No additional information about internet banking cards is provided in the given text.",
+        "data_types_present": [
+          "headings",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": []
+      },
+      {
+        "title": "BANKING",
+        "page_start": 2,
+        "page_end": 2,
+        "summary": "The section titled \"BANKING\" is currently empty, containing only the heading without any accompanying content or information. This suggests that the section may be a placeholder for future content or that the relevant information has not yet been added to the document.",
+        "data_types_present": [
+          "headings"
+        ],
+        "child_sections": [],
+        "key_entities": []
+      },
+      {
+        "title": "MOVING",
+        "page_start": 2,
+        "page_end": 2,
+        "summary": "The section titled \"MOVING\" contains only a heading with no additional content or data types present. The summary for this section is not provided in the given information.",
+        "data_types_present": [
+          "headings"
+        ],
+        "child_sections": [],
+        "key_entities": []
+      },
+      {
+        "title": "BANKIING MOBILE",
+        "page_start": 2,
+        "page_end": 2,
+        "summary": "The document section titled \"BANKIING MOBILE\" contains only a heading with no additional content or data types present. This appears to be an incomplete or placeholder section, as it lacks any substantive information or details related to mobile banking.",
+        "data_types_present": [
+          "headings"
+        ],
+        "child_sections": [],
+        "key_entities": []
+      },
+      {
+        "title": "DIGITALBANKING",
+        "page_start": 2,
+        "page_end": 3,
+        "summary": "This document provides an overview of the Digital Banking initiative, including its vision, mission, and performance highlights. It covers the bank's financial statements, non-financial developments, and includes an annex with the 2022/23 auditor's report and financial statements.",
+        "data_types_present": [
+          "figures",
+          "headings",
+          "tables"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "2.2 B",
+          "CBE",
+          "JUNE 30 2022"
+        ]
+      },
+      {
+        "title": "PROFILE",
+        "page_start": 4,
+        "page_end": 4,
+        "summary": "Awash Bank has been serving Ethiopia since 1942 and has pioneered various banking services in the country, including ATM services and Western Union Money Transfer. As of June 2024, the bank had 1,942 branches, strong international correspondent relationships, and assets worth Birr 1.4 trillion, employing over 81,000 staff.",
+        "data_types_present": [
+          "headings",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "1,942 b",
+          "4B",
+          "750 b",
+          "Birr 1.4"
+        ]
+      },
+      {
+        "title": "VISION",
+        "page_start": 4,
+        "page_end": 4,
+        "summary": "The vision of the bank is to become a world-class commercial bank that financially drives Ethiopia's future. This suggests the bank aims to be a leading financial institution in Ethiopia, playing a key role in the country's economic development and growth.",
+        "data_types_present": [
+          "headings",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": []
+      },
+      {
+        "title": "MISSION",
+        "page_start": 4,
+        "page_end": 4,
+        "summary": "The mission is to realize stakeholders' values through enhanced financial intermediation globally. This will be achieved by deploying highly motivated and skilled employees. The focus is on providing value to stakeholders through effective financial intermediation.",
+        "data_types_present": [
+          "headings",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": []
+      },
+      {
+        "title": "MOTTO",
+        "page_start": 4,
+        "page_end": 4,
+        "summary": "The motto of the bank is \"The Bank You Can Always Rely on!\" This motto emphasizes the bank's commitment to reliability and trustworthiness. It aims to instill confidence in customers that they can depend on the bank for their financial needs.",
+        "data_types_present": [
+          "headings",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": []
+      },
+      {
+        "title": "VALUES",
+        "page_start": 4,
+        "page_end": 7,
+        "summary": "The document outlines the core values of an organization, including integrity, service excellence, professionalism, empowerment, and innovation. These values emphasize honesty, high operating standards, customer focus, employee development, and a commitment to finding solutions using technology.",
+        "data_types_present": [
+          "figures",
+          "headings",
+          "lists",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          ", b"
+        ]
+      },
+      {
+        "title": "Board of Directors",
+        "page_start": 8,
+        "page_end": 9,
+        "summary": "The section contains images of the Board of Directors members, with a heading indicating \"Board of Directors\" and a continuation of the same heading. The content appears to be a visual representation of the board members, likely including their names and positions, though the specific details are not provided in the text.",
+        "data_types_present": [
+          "figures",
+          "headings",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": []
+      },
+      {
+        "title": "CBE NOOR SHARI'AH ADVISORY COMMITTEE",
+        "page_start": 10,
+        "page_end": 10,
+        "summary": "The CBE Noor Shari'ah Advisory Committee is mentioned with multiple images included. No further details about the committee's composition or functions are provided in this section.",
+        "data_types_present": [
+          "figures",
+          "headings"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "CBE"
+        ]
+      },
+      {
+        "title": "EXECUTIVE MANAGEMENT",
+        "page_start": 11,
+        "page_end": 17,
+        "summary": "The Commercial Bank of Ethiopia (CBE) achieved remarkable financial results for the fiscal year 2023/24, with a gross profit of Birr 26.6 billion and gross income of Birr 137.4 billion. This success was driven by CBE's strategic approach, integration of advanced technologies, and effective cost-cutting measures aligned with its five-year business plan. The Ethiopian economy grew by 8.1% in 2023/24, with the banking sector playing a significant role in this growth.",
+        "data_types_present": [
+          "figures",
+          "headings",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          ", B",
+          ", b",
+          ", m",
+          ". B",
+          "1.1 billion",
+          "1.3 million",
+          "1.6 billion",
+          "10%",
+          "2%",
+          "23 million Birr",
+          "3.2%",
+          "3.3%",
+          "4.7 million",
+          "40.0 billion",
+          "45 million",
+          "7%",
+          "7.3 million",
+          "7.7%",
+          "76.2%",
+          "77.9 billion"
+        ]
+      },
+      {
+        "title": "498 17h",
+        "page_start": 17,
+        "page_end": 18,
+        "summary": "The section contains an image and heading related to global and domestic economic highlights. It appears to be part of a larger document or report discussing economic trends and data.",
+        "data_types_present": [
+          "figures",
+          "headings",
+          "lists",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": []
+      },
+      {
+        "title": "1.1 The Global Economy",
+        "page_start": 18,
+        "page_end": 18,
+        "summary": "The global economy showed resilience in 2023/24 with steady growth and easing inflation despite pandemic disruptions and the Russia-Ukraine war. Advanced economies experienced stagnant growth, potentially impacting export demand and remittances for countries like Ethiopia. Declining commodity prices reduced foreign currency earnings, while decreased imported inflation eased foreign currency payment burdens.",
+        "data_types_present": [
+          "headings",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "15.4%",
+          "25.6%",
+          "3.2%",
+          "3.3%",
+          "9.3%",
+          "IMF",
+          "USD 82.88",
+          "USD 860.87"
+        ]
+      },
+      {
+        "title": "1.2 The Ethiopian Economy",
+        "page_start": 18,
+        "page_end": 20,
+        "summary": "The Ethiopian economy grew by 8.1% in 2023/24, with agriculture, services, and industry contributing 31.8%, 40.2%, and 29.1% to GDP respectively. Exports increased by 6% to USD 3.8 billion, while imports rose by 7.7% to USD 18.4 billion, resulting in a trade deficit of USD 14.7 billion. The country also saw a 14% growth in private transfers, reaching USD 5.4 billion.",
+        "data_types_present": [
+          "headings",
+          "lists",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          ", m",
+          ". M",
+          "0.7%",
+          "1.7%",
+          "1.9%",
+          "10%",
+          "11.7%",
+          "13.5%",
+          "14%",
+          "15.3%",
+          "16%",
+          "18.1%",
+          "19.9%",
+          "2%",
+          "2.3%",
+          "2.4%",
+          "22.7%",
+          "285 million",
+          "29.1%",
+          "3.2%"
+        ]
+      },
+      {
+        "title": "2.1 Income Statement",
+        "page_start": 20,
+        "page_end": 20,
+        "summary": "The Income Statement section provides a summary of a company's financial performance over a specific period. It typically includes revenues, expenses, and net income, offering insights into the company's profitability. This financial statement is crucial for assessing a business's operational efficiency and overall financial health.",
+        "data_types_present": [
+          "headings"
+        ],
+        "child_sections": [],
+        "key_entities": []
+      },
+      {
+        "title": "2.1.1 Income",
+        "page_start": 20,
+        "page_end": 20,
+        "summary": "The Bank's gross income increased by 5.6% year-over-year to Birr 137 billion in the 2023/24 fiscal year. Interest income, contributing 74% to total income, grew by 15%, while non-interest income grew by 17%. The Bank's income has shown a steady upward trend over the past five fiscal years, with interest income being the main driver of growth.",
+        "data_types_present": [
+          "figures",
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          ". B",
+          "15%",
+          "17%",
+          "5.6%",
+          "74%",
+          "Birr 137 billion"
+        ]
+      },
+      {
+        "title": "2.1.2 Expense",
+        "page_start": 21,
+        "page_end": 21,
+        "summary": "The Bank's total expense increased by 14% to Birr 110.8 billion in the 2023/24 fiscal year. Interest expenses decreased by 2.6% to 40% of total expenses, while non-interest expenses grew significantly by 29.6% to Birr 66 billion.",
+        "data_types_present": [
+          "figures",
+          "headings",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          ". B",
+          "14%",
+          "2.6%",
+          "29.6%",
+          "40%",
+          "Birr 110.8 billion",
+          "Birr 66 billion"
+        ]
+      },
+      {
+        "title": "2.1.3 Profit",
+        "page_start": 21,
+        "page_end": 22,
+        "summary": "The bank's profit before tax increased by 12.8% to Birr 1,867.8 million in 2023/24, driven by higher interest income and improved operational efficiency. Key profitability indicators also improved, with Return on Assets (RoA) rising to 1.94%, Return on Equity (RoE) reaching 32.80%, and Net Interest Margin (NIM) increasing to 4.87%.",
+        "data_types_present": [
+          "figures",
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          ". B"
+        ]
+      },
+      {
+        "title": "2.2 Balance sheet",
+        "page_start": 22,
+        "page_end": 22,
+        "summary": "The balance sheet is a financial statement that provides a snapshot of a company's assets, liabilities, and shareholders' equity at a specific point in time. It follows the fundamental accounting equation: Assets = Liabilities + Shareholders' Equity. The balance sheet is used to assess a company's financial position and is one of the three main financial statements, along with the income statement and cash flow statement.",
+        "data_types_present": [
+          "headings"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "2.2 B"
+        ]
+      },
+      {
+        "title": "2.2.1 Assets",
+        "page_start": 22,
+        "page_end": 22,
+        "summary": "CBE's total assets grew by 10% to Birr 1,436 billion, driven primarily by a 13.3% increase in loans to customers, reaching Birr 1,073 billion. The bank's strategic focus shifted towards private sector financing, with significant growth in building and construction loans (184%) and CBE NOOR financing (111%), while debt and equity securities grew only 3.2%.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          ", B",
+          ", b",
+          ", m",
+          ". B",
+          "10%",
+          "100.5 B",
+          "111%",
+          "13.3%",
+          "18.4 M",
+          "184%",
+          "184.1 M",
+          "198.3 billion",
+          "3.2%",
+          "90.9%",
+          "Birr 1,073 billion",
+          "Birr 1,436 billion",
+          "Birr 171.2 billion",
+          "Birr 218.2 billion",
+          "Birr 44.2 billion",
+          "CBE"
+        ]
+      },
+      {
+        "title": "2.2.2 Liabilities",
+        "page_start": 23,
+        "page_end": 23,
+        "summary": "The Central Bank of Ethiopia's total liabilities increased by 9.5% to Birr 1,348.5 billion in the 2023/24 fiscal year, with deposits accounting for 87% of total liabilities and growing by 11.5% to reach Birr 1,176 billion. Customer deposits saw an 11.7% increase, with demand deposits growing by 16.1% and CBE NOOR deposits surging by 28.9%, while fixed time deposits declined by 28%.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          ", b",
+          ". B",
+          "11.5%",
+          "87%",
+          "9.5%",
+          "Birr 1,176 billion",
+          "Birr 1,305.9 billion",
+          "Birr 1,348.5 billion",
+          "CBE"
+        ]
+      },
+      {
+        "title": "2.2.3 Capital and Reserves",
+        "page_start": 23,
+        "page_end": 23,
+        "summary": "CBE's total capital and reserves reached Birr 87.9 billion by June 30, 2024, representing a 17.8% increase from the previous year. The bank's capital adequacy ratio was 22.03%.",
+        "data_types_present": [
+          "headings",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "17.8%",
+          "22.03%",
+          "Birr 87.9 billion",
+          "CBE"
+        ]
+      },
+      {
+        "title": "3 HIGHLIGHTS OF NON-FINANCIAL DEVELOPMENTS",
+        "page_start": 23,
+        "page_end": 23,
+        "summary": "The document section titled \"3 HIGHLIGHTS OF NON-FINANCIAL DEVELOPMENTS\" contains only a heading with no accompanying content or summary provided. As a result, there is no information available to summarize regarding non-financial developments.",
+        "data_types_present": [
+          "headings"
+        ],
+        "child_sections": [],
+        "key_entities": []
+      },
+      {
+        "title": "3.1 Customer Base Expansion and Use of Digital Channels",
+        "page_start": 23,
+        "page_end": 23,
+        "summary": "The Bank's customer base continued to grow, with 4.7 million new deposit accounts opened during the 2023/24 fiscal year. The total number of account holders reached 45 million, a 11.7% increase from the previous year, while CBE NOOR recruited nearly 1.3 million new account holders. Digital channel usage also saw significant growth, with debit card holders, mobile banking users, and CBE Birr users reaching 31.4 million, 10.7 million, and 34.2 million respectively.",
+        "data_types_present": [
+          "headings",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          ", m",
+          "1.3 million",
+          "10.7 million",
+          "11.7%",
+          "31.4 million",
+          "34.2 million",
+          "4.7 million",
+          "45 million",
+          "7.3 million",
+          "CBE"
+        ]
+      },
+      {
+        "title": "3.2 Accessibility",
+        "page_start": 23,
+        "page_end": 23,
+        "summary": "The Bank expanded its physical presence by opening five new branches in 2023/24, bringing the total to 1,942 branches. The Bank also focused on digital accessibility, engaging 74 super agents, 42,145 agents, and 58,125 merchants for its CBE Birr service.",
+        "data_types_present": [
+          "headings",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "58,125 m",
+          "Birr.",
+          "CBE"
+        ]
+      },
+      {
+        "title": "3.3 Human Resource Development",
+        "page_start": 23,
+        "page_end": 23,
+        "summary": "The Bank's total workforce reached 81,980 by June 2024, with 48,729 permanent employees and 33,251 contract workers, making it the country's largest employer. The Bank conducted extensive training programs throughout the fiscal year, with 93,079 participants engaging in technical, developmental, and ethics training sessions.",
+        "data_types_present": [
+          "headings",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "CBE"
+        ]
+      },
+      {
+        "title": "ANNEX:2023/24AUDITOR'SREPORT ANDFINANCIALSTATEMENTS",
+        "page_start": 24,
+        "page_end": 26,
+        "summary": "The Commercial Bank of Ethiopia's 2023/24 financial statements have been audited by the Office of the Federal Auditor General Audit Services Corporation. The auditors have issued an unqualified opinion, stating that the consolidated financial statements present fairly, in all material respects, the financial position, performance, and cash flows of the Group and the Bank in accordance with International Financial Reporting Standards (IFRSs).",
+        "data_types_present": [
+          "figures",
+          "headings",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          ". B",
+          "Commercial Bank of Ethiopia"
+        ]
+      },
+      {
+        "title": "INDEPENDENTAUDITOR'SREPORTTOTHE SUPERVISINGAUTHORITYOF",
+        "page_start": 27,
+        "page_end": 27,
+        "summary": "The auditor's report addresses key audit matters for the Commercial Bank of Ethiopia, focusing on the group and consolidation process as well as loans and advances. The audit scope was determined by understanding the group structure and assessing risks, with particular attention given to the consolidation process and testing of loans and advances for proper approval, recording, and valuation.",
+        "data_types_present": [
+          "figures",
+          "headings",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          ". B",
+          ".B"
+        ]
+      },
+      {
+        "title": "INDEPENDENTAUDITOR'SREPORTTOTHE SUPERVISINGAUTHORITYOF",
+        "page_start": 28,
+        "page_end": 28,
+        "summary": "The report outlines the responsibilities of the Directors and those charged with governance for preparing and overseeing the financial statements of Commercial Bank of Ethiopia. It also details the auditors' objectives to obtain reasonable assurance that the financial statements are free from material misstatement and to issue an opinion on their fairness.",
+        "data_types_present": [
+          "figures",
+          "headings",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          ", b",
+          ", m",
+          ".M"
+        ]
+      },
+      {
+        "title": "INDEPENDENTAUDITOR'SREPORTTOTHE SUPERVISINGAUTHORITYOF",
+        "page_start": 29,
+        "page_end": 29,
+        "summary": "The auditor's report outlines the key responsibilities of the independent auditor, including obtaining an understanding of internal control, evaluating accounting policies and estimates, and assessing the going concern basis of accounting. The auditor must also evaluate the overall presentation and content of the financial statements and communicate with those charged with governance.",
+        "data_types_present": [
+          "figures",
+          "headings",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          ", b"
+        ]
+      },
+      {
+        "title": "INDEPENDENTAUDITOR'SREPORTTO THE SUPERVISINGAUTHORITYOF",
+        "page_start": 30,
+        "page_end": 30,
+        "summary": "This section of the auditor's report discusses the auditors' responsibilities for auditing the financial statements of the Commercial Bank of Ethiopia. It explains that auditors identify key audit matters from their communications with management and describe them in the report, unless prohibited by law or when disclosure would be more harmful than beneficial to the public interest.",
+        "data_types_present": [
+          "figures",
+          "headings",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": []
+      },
+      {
+        "title": "STATEMENTOFDIRECTOR'SRESPONSIBILITY",
+        "page_start": 31,
+        "page_end": 32,
+        "summary": "The Directors are responsible for preparing and fairly presenting the consolidated financial statements of Commercial Bank of Ethiopia in accordance with IFRS. They have established internal control systems and procedures to safeguard assets and reduce the risk of error, fraud, or loss. The Directors believe there have been no material breakdowns in these systems during the year, except for a temporary system glitch that was promptly addressed.",
+        "data_types_present": [
+          "figures",
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          ",b",
+          "Commercial Bank of Ethiopia"
+        ]
+      },
+      {
+        "title": "CONSOLIDATED STATEMENTS OF FINANCIAL POSITION AS AT 30 JUNE 2024 (IN ETHIOPIAN BIRR)",
+        "page_start": 33,
+        "page_end": 33,
+        "summary": "The consolidated financial position as at 30 June 2024 shows total assets of 1,436,379,607,938 Ethiopian Birr, an increase from 1,305,886,381,909 Birr in 2023. Key assets include cash and cash equivalents, debt and equity securities, loans to customers, and property, plant and equipment. Total liabilities amount to 1,436,379,607,938 Birr, with significant portions attributed to customer deposits, current tax liabilities, and employee benefits.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "CBE"
+        ]
+      },
+      {
+        "title": "CONSOLIDATED STATEMENTS OF CHANGES IN EQUITY FOR THE YEAR ENDED 30 JUNE 2024",
+        "page_start": 34,
+        "page_end": 34,
+        "summary": "The document section titled \"CONSOLIDATED STATEMENTS OF CHANGES IN EQUITY FOR THE YEAR ENDED 30 JUNE 2024\" contains only a heading and no actual content or data. This appears to be a placeholder or title for a financial statement that would typically detail changes in equity over the specified period.",
+        "data_types_present": [
+          "headings"
+        ],
+        "child_sections": [],
+        "key_entities": []
+      },
+      {
+        "title": "(IN ETHIOPIAN BIRR)",
+        "page_start": 34,
+        "page_end": 34,
+        "summary": "The document section presents a detailed breakdown of financial data in Ethiopian Birr, including total equity, retained earnings, accumulated profit or loss, and various reserves. It shows the balance as of June 30, 2023, with adjustments, profit for the year, other comprehensive income, and transfers between different reserves. The data includes figures for foreign currency translation reserve, fair value reserve, CBENOOR reserve, statutory reserve, capital reserve, legal reserve, and capital.",
+        "data_types_present": [
+          "headings",
+          "tables"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "CBE",
+          "June 30, 2023",
+          "June 30, 2024"
+        ]
+      },
+      {
+        "title": "CONSOLIDATED STATEMENTS OF CHANGES IN EQUITY FOR THE YEAR ENDED 30 JUNE 2024",
+        "page_start": 35,
+        "page_end": 37,
+        "summary": "The consolidated statements of changes in equity for the year ended 30 June 2024 show a total equity of 74,643,384,069 Ethiopian Birr. Key movements include a profit for the year of 17,436,631,798 Birr, other comprehensive income of (1,666,019,914) Birr, and transfers to various reserves totaling 4,693,286 Birr.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "16,389,972,409 B",
+          "66,268,469,392 M",
+          "CBE",
+          "June 30, 2022",
+          "June 30, 2023",
+          "National Bank of Ethiopia"
+        ]
+      },
+      {
+        "title": "(1) REPORTING ENTITY",
+        "page_start": 38,
+        "page_end": 38,
+        "summary": "Commercial Bank of Ethiopia is a financial institution established in 1942 as State Bank of Ethiopia and later incorporated as a limited liability public enterprise in 1963. The Bank's registered office is in Addis Ababa, Ethiopia and it has 1,942 branches.",
+        "data_types_present": [
+          "headings",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "1,942 b",
+          "Commercial Bank of Ethiopia",
+          "December 16, 1963"
+        ]
+      },
+      {
+        "title": "(2) BASIS OF CONSOLIDATION",
+        "page_start": 38,
+        "page_end": 38,
+        "summary": "The Bank's consolidated financial statements include its own statements and those of three subsidiaries in Ethiopia, Djibouti, and South Sudan. Control is defined as the Bank's ability to govern the financial and operational policies of these entities to derive benefits from their activities.",
+        "data_types_present": [
+          "headings",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": []
+      },
+      {
+        "title": "(3) BASIS OF PREPARATION",
+        "page_start": 38,
+        "page_end": 39,
+        "summary": "The Group's consolidated financial statements are prepared in accordance with IFRS as issued by the IASB. The financial statements are prepared on a historical cost basis, with certain items measured at fair value. Management has made judgments, estimates, and assumptions in preparing the financial statements, which may differ from actual results.",
+        "data_types_present": [
+          "headings",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          ", m",
+          ". M"
+        ]
+      },
+      {
+        "title": "(4) SIGNIFICANT ACCOUNTING POLICIES",
+        "page_start": 39,
+        "page_end": 59,
+        "summary": "The Bank consolidates the financial statements of its subsidiaries, which are entities it controls through variable returns and power over the investee. The Bank's subsidiaries include Commercial Nominees PLC, Commercial Bank of Ethiopia-South Sudan Limited, and Commercial Bank of Ethiopia-Djibouti Limited, all of which are 100% owned as of June 30, 2024 and 2023.",
+        "data_types_present": [
+          "figures",
+          "headings",
+          "lists",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          ", b",
+          ", m",
+          ". B",
+          ". M",
+          "10%",
+          "100%",
+          "12 m",
+          "2 M",
+          "20%",
+          "2023 b",
+          "25%",
+          "3 B",
+          "5%",
+          "50%",
+          "Birr,",
+          "Birr.",
+          "Commercial Bank of Ethiopia",
+          "Federal Democratic Republic",
+          "January 1, 2024",
+          "January 1, 2025"
+        ]
+      },
+      {
+        "title": "(5) FINANCIAL RISK REVIEW",
+        "page_start": 59,
+        "page_end": 64,
+        "summary": "The Bank faces multiple financial risks including credit, liquidity, market, capital management, and operational risks, which are managed through a comprehensive risk management framework overseen by the Board of Directors and the Loan and Risk Review Committee. The Bank's risk management policies aim to identify, analyze, and control these risks while ensuring compliance with regulatory standards, with regular reporting to the Board on risk management activities and effectiveness.",
+        "data_types_present": [
+          "headings",
+          "lists",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          ", B",
+          ", b",
+          ". B",
+          "1 b",
+          "10%",
+          "100%",
+          "15%",
+          "20%",
+          "25%",
+          "29.9%",
+          "30%",
+          "35%",
+          "39.9%",
+          "49.9%",
+          "55%",
+          "59.9%",
+          "60%",
+          "69.9%",
+          "70%",
+          "80%"
+        ]
+      },
+      {
+        "title": "30 June 2024",
+        "page_start": 64,
+        "page_end": 64,
+        "summary": "The document provides a detailed breakdown of loan classifications and amounts as of June 30, 2024. It categorizes loans into risk grades 1-8, showing individually significant loans and other loans for each grade, along with gross amounts. The total principal amounts to 381,666,303,403, with interest receivable at 77,528,430,268 and provisions for loan losses at -35,875,986,052, resulting in a net loan value of 423,318,747,619.",
+        "data_types_present": [
+          "headings",
+          "tables"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "4 M"
+        ]
+      },
+      {
+        "title": "30 June 2024",
+        "page_start": 64,
+        "page_end": 86,
+        "summary": "This section provides a detailed breakdown of the bank's credit risk exposure across different risk grades, showing individually significant loans and other loans categorized by risk level. It also includes information on gross amounts, interest receivable, provisions for loan losses, and net loan figures, totaling over 330 billion. The section concludes by referencing the bank's accounting policies for estimating impairment and its approach to determining significant increases in credit risk.",
+        "data_types_present": [
+          "figures",
+          "headings",
+          "lists",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          ", B",
+          ", b",
+          ", m",
+          ". B",
+          ". M",
+          ". b",
+          "1 m",
+          "10%",
+          "100%",
+          "109%",
+          "113,223,891,934 M",
+          "12 m",
+          "12,295,358,584 B",
+          "134,435,607,614 B",
+          "14%",
+          "15%",
+          "17%",
+          "193,495,700 B",
+          "2,473,748,304 B",
+          "2,528,805,376 M"
+        ]
+      },
+      {
+        "title": "(6) FAIR VALUE OF FINANCIAL INSTRUMENTS",
+        "page_start": 86,
+        "page_end": 89,
+        "summary": "The Group measures fair value using quoted prices in active markets when available, or valuation techniques that maximize observable inputs when no quoted price exists. Fair value represents the price that would be received to sell an asset or paid to transfer a liability in an orderly transaction between market participants. The Group uses discounted cash flow methods or quoted prices for similar securities to value investment securities without observable market data.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "NBE"
+        ]
+      },
+      {
+        "title": "(7) INTEREST INCOME AND EXPENSE",
+        "page_start": 89,
+        "page_end": 89,
+        "summary": "The Group's interest income increased to 101,040,098,062 in 2024 from 87,823,861,178 in 2023, driven by higher income from loans, advances to customers, and debt securities. Interest expense decreased to 44,485,798,801 in 2024 from 45,674,380,732 in 2023. The Group assessed credit impairment for financial assets and applied effective interest rates to amortised cost for impaired assets.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": []
+      },
+      {
+        "title": "(8) NON-INTEREST INCOME AND EXPENSES",
+        "page_start": 89,
+        "page_end": 90,
+        "summary": "The Group's non-interest income increased from 27,736,755,393 in 2023 to 34,097,904,909 in 2024, driven by growth in commissions, bank services, and other income. Non-interest expenses also rose significantly, with salaries and employee benefits increasing from 30,128,908,095 to 35,258,382,531, and other operational costs like outsourcing, depreciation, and advertising also showing substantial growth. The Group recognizes revenue when it satisfies its performance obligations, and does not consider its contracts with customers to have a significant financing component.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "17,341,318,368 B"
+        ]
+      },
+      {
+        "title": "(9) CASH AND CASH EQUIVALENTS",
+        "page_start": 90,
+        "page_end": 90,
+        "summary": "The cash and cash equivalents of the company increased from ETB 184,664,053,906 in 2023 to ETB 193,540,186,560 in 2024. The cash reserves, which are non-interest earning and based on deposit values adjusted for National Bank of Ethiopia requirements, stood at 7% on average per calendar month. A significant portion of the placements with other banks, specifically ETB 8,943,812,518.17 in 2024 and ETB 9,832,603,838.96 in 2023, represents a debt service reserve account related to a master loan agreement with EXIM Bank of China for State Owned Enterprises, and these funds are not available for the Group's day-to-day operations.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "7%",
+          "ETB 8,943,812,518.17",
+          "ETB 9,832,603,838.96",
+          "National Bank of Ethiopia"
+        ]
+      },
+      {
+        "title": "(10) DEBT AND EQUITY SECURITIES",
+        "page_start": 91,
+        "page_end": 93,
+        "summary": "The Group maintained a portfolio of debt securities including coupon bonds, corporate bonds, Treasury & DBE Bonds, Government securities, and Treasury bills. As of June 30, 2024, the total debt securities portfolio was valued at ETB 785,298,333,929, with an allowance for impairment losses of ETB 20,670,348,017. Interest receivable on these securities totaled ETB 116,035,620,494 as of June 30, 2024.",
+        "data_types_present": [
+          "headings",
+          "lists",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          ". M",
+          "30%",
+          "COMMERCIAL BANK OF ETHIOPIA",
+          "ETB 154,836,399",
+          "ETB 24,027,397.",
+          "ETB 46,450,920.",
+          "ETB 80,091,323",
+          "June 30, 2023"
+        ]
+      },
+      {
+        "title": "(11) LOANS AND ADVANCES TO CUSTOMERS",
+        "page_start": 94,
+        "page_end": 96,
+        "summary": "The table presents detailed information on loans and advances to customers as of June 30, 2024, categorized by sector and loan type. It includes gross amounts, allowances for loan losses, and book values for various sectors including agriculture, manufacturing, domestic trade services, international trade, building and construction, consumer loans, and CBENOORFINANCING.",
+        "data_types_present": [
+          "figures",
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "13,468,027,816 B",
+          "2024.B",
+          "28,328,936,680 M",
+          "33,538,037,334 M",
+          "6,715,685,794 B",
+          "CBE",
+          "ETB."
+        ]
+      },
+      {
+        "title": "(12) LOANS TO MICRO-FINANCE INSTITUTIONS",
+        "page_start": 96,
+        "page_end": 96,
+        "summary": "The bank's loans to micro-finance institutions totaled 1,830,164,440 ETB as of June 30, 2024, up from 1,157,509,154 ETB the previous year. This includes 1,272,086,544 ETB in conventional loans and 1,769,109,924 ETB in CBE Noor financing. The bank recognized 6,084,985 ETB in impairment losses on these loans during the year.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "CBE"
+        ]
+      },
+      {
+        "title": "(13) RECEIVABLES",
+        "page_start": 96,
+        "page_end": 97,
+        "summary": "The receivables section shows a breakdown of various types of receivables including government, foreign, and other receivables, as well as staff loans and prepayments. The total receivables decreased from 7,469,872,003 in 2023 to 2,959,855,401 in 2024, with a significant reduction in the allowance for doubtful debts from 1,783,505,031 to 2,269,975,752.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "1,372,462,678 B",
+          "23 B",
+          "486,470,721 B"
+        ]
+      },
+      {
+        "title": "(14) INVESTMENT ASSOCIATES",
+        "page_start": 97,
+        "page_end": 97,
+        "summary": "The company's investment in Ethiopia Re-insurance Company increased from ETB 410,773,292 in 2023 to ETB 505,713,285 in 2024. The Group's share of total comprehensive income from this associate was ETB 94,939,993 in 2024, up from ETB 47,052,414 in 2023. The company holds a 20% ownership interest in the associate, with total comprehensive income of ETB 474,699,965 in 2024 compared to ETB 235,262,069 in 2023.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "100%",
+          "20%",
+          "2023.20%",
+          "2024.20%"
+        ]
+      },
+      {
+        "title": "(15) NON-CURRENT ASSETS HELD FOR SALE",
+        "page_start": 97,
+        "page_end": 98,
+        "summary": "The Group's non-current assets held for sale decreased from 27,014,138 in 2022/23 to 75,070,410 in 2023/24. This change was primarily driven by the transfer of assets to property, plant and equipment and sales/disposals, partially offset by new acquisitions and impairment losses. The Group's management has committed to a plan for these assets.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "23.B",
+          "23.M",
+          "24.B",
+          "24.M",
+          "ETB 48,627,065"
+        ]
+      },
+      {
+        "title": "(16) INVESTMENT PROPERTY",
+        "page_start": 98,
+        "page_end": 99,
+        "summary": "The Group's investment property consists of office buildings leased to third parties under operating leases with initial terms of 1-5 years. The investment property is depreciated at 5% per annum on a straight-line basis, with a carrying amount of ETB 523,519 as of June 30, 2024. The fair value of the investment property was determined to be ETB 35,975,425 using a comparable sales approach.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "2,951,546,204 B",
+          "5%",
+          "ETB 35,975,425.",
+          "ETB 523,519.",
+          "ETB 7,875,094,444",
+          "June 30, 2024"
+        ]
+      },
+      {
+        "title": "(17) PROPERTY, PLANT AND EQUIPMENT",
+        "page_start": 99,
+        "page_end": 100,
+        "summary": "The property, plant and equipment section details the net carrying amounts and cost of various assets including buildings, computer and software, fixtures, fittings and equipment, motor vehicles, and work in progress. The section shows balances at June 30, 2023 and July 1, 2022, along with translation differences, reclassifications, disposals, and additions.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "4,642,283,384 B",
+          "691,108.23 M"
+        ]
+      },
+      {
+        "title": "(18) INTANGIBLE ASSETS",
+        "page_start": 101,
+        "page_end": 101,
+        "summary": "The Group's intangible assets, primarily software, increased from ETB 1,531,823,700 to ETB 1,915,863,525 in 2023/24. Amortization and impairment charges rose to ETB 264,603,657, resulting in a net carrying value of ETB 885,238,539. The Group also has fully amortized intangible assets worth ETB 447,740,921 that continue to provide economic benefits.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "159,722,582 B",
+          "264,603,657 B",
+          "384,039,825 B",
+          "478,100,029 B",
+          "ETB 159,722,582",
+          "ETB 264,603,657",
+          "ETB 447,740,921 b"
+        ]
+      },
+      {
+        "title": "(19) OTHER ASSETS",
+        "page_start": 101,
+        "page_end": 101,
+        "summary": "The Other Assets section shows a total of ETB 12,716,025,783 as of June 30, 2024, compared to ETB 12,189,419,675 in 2023. Key components include Purchase in Progress (ETB 1,706,076,703), Stationary and Other Supplies (ETB 2,658,714,886), IT Expansion Project (ETB 1,779,824,102), Prepaid (ETB 4,729,658,518), and Others (ETB 1,841,751,575). The Prepaid category decreased by ETB 804,710,914, while Purchase in Progress decreased by ETB 952,112,629.",
+        "data_types_present": [
+          "headings",
+          "tables"
+        ],
+        "child_sections": [],
+        "key_entities": []
+      },
+      {
+        "title": "(20) RIGHT OF USE ASSETS AND FINANCE LEASE OBLIGATIONS",
+        "page_start": 102,
+        "page_end": 103,
+        "summary": "The Group leases various assets including land and buildings, with right-of-use assets (ROUA) and finance lease obligations detailed for 2023/24 and 2022/23. The total ROUA balance increased from 10,626,552,899 in 2022/23 to 11,173,156,842 in 2023/24, while net carrying value decreased from 4,972,239,466 to 4,885,907,561. Depreciation and additions to ROUA are tracked separately for land and building assets, with significant changes in building assets over the two fiscal years.",
+        "data_types_present": [
+          "figures",
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "1,609,439,252 B",
+          "1,870,728,685 B",
+          "24,879,948 B",
+          "30,152,165 B",
+          "4.73%",
+          "9.0%"
+        ]
+      },
+      {
+        "title": "(21) CUSTOMERS' DEPOSITS AND DEPOSITS DUE TO OTHER BANKS",
+        "page_start": 104,
+        "page_end": 104,
+        "summary": "The bank's total customer deposits increased to 1,175,455,600,180 ETB as of June 30, 2024 from 1,052,782,471,633 ETB in 2023. Savings deposits saw the largest growth, rising to 621,546,980,345 ETB from 582,488,771,126 ETB year-over-year. Deposits due to other banks decreased significantly to 580,723,581 ETB from 1,247,740,227 ETB, primarily due to reduced foreign bank deposits.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          ". B",
+          "0%",
+          "1,052,782,471,633 b",
+          "7%",
+          "7.2%",
+          "CBE"
+        ]
+      },
+      {
+        "title": "(22) PROVISIONS",
+        "page_start": 105,
+        "page_end": 105,
+        "summary": "The provisions section details various types of provisions held by the bank, including bonuses, cash prize awards, legal claims, and unutilized overdrafts, letters of credit, and guarantees. The table shows the balances, increases/decreases, and provisions used for these items over the years 2022-2024, with total provisions increasing from 2,648,488,185 to 2,845,402,347. The notes explain that bonuses are short-term benefits for employees, legal provisions are estimates for pending court claims, and unutilized O/D, LC, and guarantee provisions are for off-balance sheet items.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "12 m",
+          "2,845,402,347 B"
+        ]
+      },
+      {
+        "title": "(23) EMPLOYEE BENEFITS",
+        "page_start": 105,
+        "page_end": 106,
+        "summary": "The document section provides detailed information on employee benefits, including movements in the present value of defined benefit liability, actuarial losses recognized in other comprehensive income, and actuarial assumptions. Key figures show a significant increase in the defined benefit liability from ETB 12,236,608,600 in 2023 to ETB 14,200,049,328 in 2024, with various factors contributing to this change such as service costs, interest costs, and actuarial gains/losses.",
+        "data_types_present": [
+          "headings",
+          "lists",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          ". M",
+          "0.5%",
+          "1.0%",
+          "12.75%",
+          "13.75%",
+          "14.00%",
+          "14.97%",
+          "15.78%",
+          "16.75%",
+          "17.03%",
+          "18.00%",
+          "19.34%",
+          "2024 b",
+          "21.00%",
+          "681,958,355 B",
+          "ETB 12,236,608,600",
+          "ETB 14,200,049,328"
+        ]
+      },
+      {
+        "title": "(24) OTHER LIABILITIES",
+        "page_start": 106,
+        "page_end": 107,
+        "summary": "The table shows other liabilities as of June 30, 2024 and 2023, totaling 148,316,006,497 ETB and 155,004,289,398 ETB respectively. Key liabilities include amounts owed to the National Bank of Ethiopia, margin accounts, certified payment orders, and unearned income from bank guarantee commissions. The Investment Risk Reserve is set aside to cover potential losses for Investment Account Holders.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "104,574,708,536 M",
+          "171,892,358 M",
+          "3,982,342,305 B",
+          "CBE",
+          "National Bank of Ethiopia"
+        ]
+      },
+      {
+        "title": "(25) INCOME TAXES",
+        "page_start": 107,
+        "page_end": 108,
+        "summary": "The Group is subject to income taxes in Ethiopia (30%), South Sudan (20% for large businesses), and Djibouti (25%). The effective income tax rate for the year ended 30 June 2024 was 23.44%, down from 28.90% in 2023. The Group's income tax expense for 2024 was 4,290,333,839 ETB, compared to 4,704,995,357 ETB in 2023.",
+        "data_types_present": [
+          "headings",
+          "lists",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          ". b",
+          "10%",
+          "15%",
+          "20%",
+          "2023.B",
+          "2024.B",
+          "23.44%",
+          "25%",
+          "28.90%",
+          "30%",
+          "CBE"
+        ]
+      },
+      {
+        "title": "(26) EQUITY",
+        "page_start": 108,
+        "page_end": 108,
+        "summary": "Commercial Bank of Ethiopia is government-owned with no shares, and its capital was ETB 40 billion as of June 30, 2024. The bank maintains various reserve accounts including legal reserves (25% of annual net profit), statutory reserves for uncollectable accounts, and profit equalization reserves for investment account holders.",
+        "data_types_present": [
+          "headings",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "10%",
+          "25%",
+          "5%",
+          "75%",
+          "CBE",
+          "Commercial Bank of Ethiopia",
+          "ETB 40,000,000,000",
+          "Federal Democratic Republic",
+          "National Bank of Ethiopia"
+        ]
+      },
+      {
+        "title": "(27) COMMITMENTS AND CONTINGENT LIABILITIES",
+        "page_start": 109,
+        "page_end": 109,
+        "summary": "The Bank has significant commitments and contingent liabilities related to guarantees and letters of credit. As of June 30, 2024, total commitments amounted to ETB 51.8 billion, while contingent liabilities totaled ETB 191.6 billion. These obligations are offset by corresponding third-party obligations and will only be triggered in case of customer default.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "34,727,836,042 B"
+        ]
+      },
+      {
+        "title": "(28) RELATED PARTIES",
+        "page_start": 109,
+        "page_end": 112,
+        "summary": "The Commercial Bank of Ethiopia paid its key management personnel a total of ETB 103,647,619 in 2024, including salaries, allowances, bonuses, and retirement benefits. Key management members also received loans totaling ETB 68,293,745 as of June 30, 2024, secured against properties being acquired.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "2,897,150 B",
+          "3,709,860 b",
+          "47,052,414 B",
+          "CBE",
+          "COMMERCIAL BANK OF ETHIOPIA",
+          "Commercial Bank of Ethiopia"
+        ]
+      },
+      {
+        "title": "SEPARATE STATEMENT OF CHANGES IN EQUITY FOR THE YEAR ENDED 30 JUNE 2024",
+        "page_start": 113,
+        "page_end": 113,
+        "summary": "This document section is titled \"SEPARATE STATEMENT OF CHANGES IN EQUITY FOR THE YEAR ENDED 30 JUNE 2024\" and contains only a heading with no accompanying data or content. The section appears to be a placeholder or title for a financial statement that would typically detail changes in equity over the specified fiscal year.",
+        "data_types_present": [
+          "headings"
+        ],
+        "child_sections": [],
+        "key_entities": []
+      },
+      {
+        "title": "(IN ETHIOPIAN BIRR)",
+        "page_start": 113,
+        "page_end": 115,
+        "summary": "This section presents a detailed financial statement in Ethiopian Birr, including total equity, fair value reserve, retained earnings, accumulated profit or loss, and various reserves. The statement shows significant figures across different categories, with total equity amounting to 71,904,002,336 Birr and accumulated profit or loss at 12,378,732,197 Birr.",
+        "data_types_present": [
+          "figures",
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "15,666,003,079 B",
+          "65,441,853,030 M",
+          "National Bank of Ethiopia"
+        ]
+      },
+      {
+        "title": "(29) FINANCIAL RISK REVIEW",
+        "page_start": 116,
+        "page_end": 121,
+        "summary": "The Bank is exposed to credit, liquidity, market, capital management, and operational risks, and conducts regular risk management efforts. The Board of Directors has overall responsibility for establishing and overseeing the Bank's risk management framework, with the Loan and Risk Review Committee (LRRC) responsible for setting standards and monitoring compliance. The Bank's risk management policies are regularly reviewed to reflect changes in market conditions and the Bank's business.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          ". B",
+          "1 m",
+          "3 m",
+          "31.35%",
+          "36.03%",
+          "NBE",
+          "National Bank of Ethiopia"
+        ]
+      },
+      {
+        "title": "1 year months",
+        "page_start": 121,
+        "page_end": 121,
+        "summary": "The data shows exposure to interest rate risk for various time periods, with amounts ranging from 2,780 to 142,267 million Birr. The largest exposure is for the 1-3 month period at 142,267 million Birr, while the smallest is for up to 1 month at 2,780 million Birr.",
+        "data_types_present": [
+          "headings",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "1 m"
+        ]
+      },
+      {
+        "title": "30 June 2024",
+        "page_start": 121,
+        "page_end": 121,
+        "summary": "The document provides a detailed breakdown of interest rate sensitive assets and liabilities as of June 30, 2024. It includes data on cash, loans, deposits, and other financial instruments, along with calculations for rate sensitive gaps and adjusted interest rate changes. The summary table shows total assets of 1,434,396 and total rate sensitive liabilities, with various ratios and percentages provided for analysis.",
+        "data_types_present": [
+          "headings",
+          "lists",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "14%",
+          "21%",
+          "59%",
+          "78%",
+          "79%",
+          "9%",
+          "NBE"
+        ]
+      },
+      {
+        "title": "COMMERCIAL BANK OF ETHIOPIA NOTES TO THE SEPARATE FINANCIAL STATEMENTS FOR THE",
+        "page_start": 121,
+        "page_end": 121,
+        "summary": "This section contains notes to the separate financial statements for the Commercial Bank of Ethiopia. The notes provide additional context and details about the bank's financial position and performance.",
+        "data_types_present": [
+          "headings"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "COMMERCIAL BANK OF ETHIOPIA"
+        ]
+      },
+      {
+        "title": "YEAR ENDED 30 JUNE 2024",
+        "page_start": 121,
+        "page_end": 122,
+        "summary": "The bank's interest rate risk exposure shows total assets of 1,254,331 million Birr and total liabilities of 1,053,965 million Birr. The bank has significant exposure to interest rate risk, with 15% of assets maturing within 1-3 years and 99% of assets maturing within 3 months to 1 year.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "1 m",
+          "100%",
+          "15%",
+          "17%",
+          "3 m",
+          "7%",
+          "89%",
+          "99%",
+          "NBE"
+        ]
+      },
+      {
+        "title": "COMMERCIAL BANK OF ETHIOPIA NOTES TO THE SEPARATE FINANCIAL STATEMENTS FOR THE",
+        "page_start": 122,
+        "page_end": 122,
+        "summary": "This section contains notes to the separate financial statements for the Commercial Bank of Ethiopia. The notes provide additional context and details about the bank's financial position and performance.",
+        "data_types_present": [
+          "headings"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "COMMERCIAL BANK OF ETHIOPIA"
+        ]
+      },
+      {
+        "title": "YEAR ENDED 30 JUNE 2024",
+        "page_start": 122,
+        "page_end": 127,
+        "summary": "The Bank manages foreign exchange rate risk by monitoring net positions in various currencies daily. As of June 30, 2024, the Bank held significant foreign currency assets denominated in USD, INR, JPY, and DJF. The Bank's exposure to foreign exchange risk is primarily through its on-balance sheet foreign currency assets and liabilities.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          ", m",
+          ". B",
+          "10%",
+          "15%",
+          "20%",
+          "25%",
+          "26.10%",
+          "29.57%",
+          "31%",
+          "311%",
+          "342%",
+          "8%",
+          "CBE",
+          "Federal Democratic Republic",
+          "NBE",
+          "National Bank of Ethiopia",
+          "USD,"
+        ]
+      },
+      {
+        "title": "(30) FAIR VALUE OF FINANCIAL INSTRUMENTS",
+        "page_start": 128,
+        "page_end": 131,
+        "summary": "The Bank determines fair value based on the price that would be received to sell an asset or paid to transfer a liability in an orderly transaction between market participants. When there is no quoted price in an active market, the Bank uses valuation techniques that maximize the use of relevant observable inputs and minimize the use of unobservable inputs. Investment securities with observable market prices are fair valued using that information, while those without observable market data are fair valued using discounted cash flow method or quoted market prices for securities with similar yield characteristics.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "NBE"
+        ]
+      },
+      {
+        "title": "(31) INTEREST INCOME AND EXPENSE",
+        "page_start": 131,
+        "page_end": 131,
+        "summary": "The bank's interest income for the year ending June 30, 2024 was 101,018,080,647 ETB, up from 87,809,414,594 ETB in 2023. Interest income came primarily from loans and advances to customers (39,350,403,532 ETB) and debt securities & bank balances (61,667,677,115 ETB). Interest expense for the same period was 44,494,781,220 ETB, down from 45,721,592,196 ETB in 2023, mainly due to depositary obligations.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": []
+      },
+      {
+        "title": "(32) NON-INTEREST INCOME AND EXPENSES",
+        "page_start": 131,
+        "page_end": 133,
+        "summary": "The bank's non-interest income increased to 33,037,282,886 ETB in 2024 from 28,226,663,596 ETB in 2023, driven by growth in commissions, bank services, and other income. Non-interest expenses rose to 47,819,678,052 ETB in 2024 from 37,254,706,459 ETB in 2023, primarily due to higher salaries, outsourcing costs, and depreciation. The bank recognizes revenue when performance obligations are satisfied, with no significant financing component in its contracts.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "20,530,256,700 B",
+          "7%",
+          "ETB 8,943,812,518.17",
+          "ETB 9,832,603,838.96",
+          "NBE",
+          "National Bank of Ethiopia"
+        ]
+      },
+      {
+        "title": "(34) DEBT AND EQUITY SECURITIES",
+        "page_start": 133,
+        "page_end": 135,
+        "summary": "The debt securities account shows a total value of 764,624,985,912 ETB as of June 30, 2024, up from 741,283,426,678 ETB in 2023. The portfolio includes various types of bonds and government securities, with an allowance for impairment losses of 20,670,348,017 ETB. Interest receivable on these securities totaled 116,035,620,494 ETB for the current year.",
+        "data_types_present": [
+          "headings",
+          "lists",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "30%",
+          "ETB 154,836,399",
+          "ETB 24,027,397,",
+          "ETB 46,450,920",
+          "ETB 80,091,323"
+        ]
+      },
+      {
+        "title": "(35) LOANS AND ADVANCES TO CUSTOMERS",
+        "page_start": 136,
+        "page_end": 138,
+        "summary": "The bank's loans and advances to customers totaled 375,672,775,733 VND as of June 30, 2024, with a gross amount of 375,672,775,733 VND and an allowance for loan losses of 13,962,685,180 VND. The largest category was manufacturing loans at 233,765,394,292 VND, followed by agriculture loans at 34,926,706,453 VND. The bank also provided loans for domestic trade and services, international trade, building and construction, and consumer loans.",
+        "data_types_present": [
+          "figures",
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "13,468,027,816 B",
+          "28,328,936,680 M",
+          "33,538,037,334 M",
+          "6,715,685,794 B"
+        ]
+      },
+      {
+        "title": "(36) LOANS TO MICRO-FINANCE INSTITUTIONS",
+        "page_start": 138,
+        "page_end": 138,
+        "summary": "The document section provides details on loans to micro-finance institutions, including classification by category and impairment provisions as of June 30, 2024 and 2023. It also shows impairment losses on loans and advances to financial institutions, with amounts recognized during the year and balances at the end of each reporting period.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "CBE",
+          "ETB 30"
+        ]
+      },
+      {
+        "title": "(37) RECEIVABLES",
+        "page_start": 138,
+        "page_end": 139,
+        "summary": "The bank's receivables increased from 5,785,229,296 ETB in 2023 to 7,852,584,860 ETB in 2024. The allowance for expected losses also rose from 1,783,505,031 ETB to 2,269,975,752 ETB over the same period. Provisions for doubtful debts remained relatively stable, with a slight increase in the balance as at 30 June 2024 compared to the previous year.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": []
+      },
+      {
+        "title": "(38) INVESTMENTS IN SUBSIDIARIES AND ASSOCIATES",
+        "page_start": 139,
+        "page_end": 140,
+        "summary": "The bank's investments in subsidiaries and associates as of June 30, 2024, totaled ETB 5.09 billion, up from ETB 4.05 billion in 2023. Key subsidiaries include Commercial Nominees PLC, Commercial Bank of Ethiopia (CBE) South Sudan Limited, and CBE Djibouti Limited. The bank also holds a 100% stake in Ethiopian Reinsurance S.C, an associate company.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "100%",
+          "20%",
+          "20.00%",
+          "CBE",
+          "Commercial Bank of Ethiopia"
+        ]
+      },
+      {
+        "title": "(39) NON-CURRENT ASSETS HELD FOR SALE",
+        "page_start": 140,
+        "page_end": 141,
+        "summary": "The non-current assets held for sale decreased significantly from 2022/23 to 2023/24, with total costs dropping from 1,036,172,653 to 75,070,410. The impairment loss on acquired assets increased substantially, reaching 88,037,860 in 2023/24 compared to 176,309,233 in 2022/23. By 30 June 2024, the closing balance for non-current assets held for sale was 75,070,410, with no remaining balance after accounting for provisions.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "23.B",
+          "23.M",
+          "24.B",
+          "ETB 48,627,065"
+        ]
+      },
+      {
+        "title": "(40) INVESTMENT PROPERTY",
+        "page_start": 141,
+        "page_end": 142,
+        "summary": "The Bank's investment property consists of office buildings leased to third parties under operating leases with initial terms of 1-5 years. The investment property is depreciated at 5% per annum on a straight-line basis, with a carrying amount of ETB 523,519 as of June 30, 2024. The Bank also has freehold land totaling 691,108.23 square meters, which is not depreciated.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "5%",
+          "691,108.23 M",
+          "ETB 35,975,425.",
+          "ETB 523,519.",
+          "ETB 7,875,094,443.95",
+          "June 30, 2024"
+        ]
+      },
+      {
+        "title": "(41) PROPERTY, PLANT AND EQUIPMENT",
+        "page_start": 142,
+        "page_end": 143,
+        "summary": "The property, plant and equipment section shows detailed balances for various asset categories as of June 30, 2024 and July 1, 2023. Key movements include additions, disposals, transfers/reclassifications, and depreciation affecting the net carrying amounts across different asset classes like buildings, computer software, fixtures, motor vehicles, and work in progress. The total net carrying amount increased from 18,778,369,954 ETB to 20,045,670,960 ETB over the period.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "1,257,422,659 B",
+          "4,574,478,618 B"
+        ]
+      },
+      {
+        "title": "(42) INTANGIBLE ASSETS",
+        "page_start": 144,
+        "page_end": 144,
+        "summary": "The Bank's intangible assets consist of software valued at ETB 1,908,710,468 as of June 30, 2024, with an accumulated amortization of ETB 1,030,441,951, resulting in a net carrying value of ETB 878,268,517. The amortization expense for the year ended June 30, 2024 was ETB 264,603,657, and the Bank also has fully amortized intangible assets worth ETB 447,740,921 that continue to provide economic benefits.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "159,722,582 B",
+          "264,603,657 B",
+          "384,147,856 B",
+          "473,025,549 B",
+          "ETB 159,722,582",
+          "ETB 264,603,657",
+          "ETB 447,740,921 b"
+        ]
+      },
+      {
+        "title": "(43) OTHER ASSETS",
+        "page_start": 145,
+        "page_end": 145,
+        "summary": "The \"Other Assets\" section shows a total of ETB 11,674,433,703 as of 30 June 2024, compared to ETB 10,902,474,434 in the previous year. The largest components are \"Purchase in progress\" at ETB 1,706,076,703 and \"Prepaid\" at ETB 4,415,855,898. Other notable items include \"Stationery and other supplies\" and \"IT expansion project\" with significant year-over-year increases.",
+        "data_types_present": [
+          "headings",
+          "tables"
+        ],
+        "child_sections": [],
+        "key_entities": []
+      },
+      {
+        "title": "(44) RIGHT OF USE ASSETS AND FINANCE LEASE OBLIGATIONS",
+        "page_start": 145,
+        "page_end": 146,
+        "summary": "The Bank leases various assets including land and buildings, with right-of-use assets totaling 11,066,731,767 as of June 30, 2024. The net carrying value of these assets is 4,919,494,149, comprising 83,845,052 for land and 4,835,649,097 for buildings. Depreciation and additions to the assets are detailed for the 2023/24 and 2022/23 fiscal years.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "1,602,002,931 B",
+          "1,838,768,673 B",
+          "1,854,451,043 B",
+          "1,913,275,397 B",
+          "24,758,152 B",
+          "30,152,165 B",
+          "4.73%",
+          "9.50%"
+        ]
+      },
+      {
+        "title": "(45) CUSTOMERS' DEPOSITS AND DEPOSITS DUE TO OTHER BANKS",
+        "page_start": 147,
+        "page_end": 147,
+        "summary": "The document section presents detailed data on customers' deposits and deposits due to other banks for two reporting periods. It breaks down deposits into categories such as payable on demand, savings deposits, and term deposits, further segmented by sector (local/central government, private sector, public enterprises). The section also includes information on deposits due to domestic and foreign banks, distinguishing between local currency and foreign currency deposits.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          ". B",
+          "0%",
+          "7%",
+          "7.2%",
+          "CBE"
+        ]
+      },
+      {
+        "title": "(46) PROVISIONS",
+        "page_start": 148,
+        "page_end": 148,
+        "summary": "The bank's provisions for bonuses, cash prize awards, and legal claims increased from 2022 to 2024, with total provisions rising from 2.65 billion to 2.85 billion. Bonus and cash prize awards are short-term benefits for employees, while legal provisions cover pending court claims that may not be ruled in the bank's favor. The bank recorded increases in income for these provisions in 2023 and 2024, with some amounts being used during the year.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "12 m",
+          "2,845,402,347 B"
+        ]
+      },
+      {
+        "title": "(47) EMPLOYEE BENEFITS",
+        "page_start": 148,
+        "page_end": 149,
+        "summary": "The Bank's defined benefit plan had a liability of ETB 14,144,760,630 as of June 30, 2024, up from ETB 12,198,394,348 in 2023. The plan is exposed to actuarial risks including longevity, currency, interest, and market risks. Key actuarial assumptions include a discount rate of 15.78% and a salary increase rate of 17.03% for 2024.",
+        "data_types_present": [
+          "headings",
+          "lists",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          ". M",
+          "0.5%",
+          "1.0%",
+          "12.75%",
+          "13.75%",
+          "14.00%",
+          "14.97%",
+          "15.78%",
+          "16.75%",
+          "17.03%",
+          "172,626,713 B",
+          "18.00%",
+          "19.34%",
+          "2024 b",
+          "21.00%",
+          "ETB 12,198,394,348",
+          "ETB 14,144,760,630"
+        ]
+      },
+      {
+        "title": "(48) OTHER LIABILITIES",
+        "page_start": 150,
+        "page_end": 150,
+        "summary": "The table shows other liabilities for the National Bank of Ethiopia as of June 30, 2024 and 2023. Key items include margin accounts, deposits for guarantees, payable to other banks, and various other liabilities totaling over 146 billion ETB in 2024.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "CBE",
+          "National Bank of Ethiopia"
+        ]
+      },
+      {
+        "title": "(49) INCOME TAXES",
+        "page_start": 150,
+        "page_end": 152,
+        "summary": "The Bank's effective income tax rate was 22.92% for the year ended 30 June 2024, down from 28.32% in 2023. The reconciliation shows various factors impacting the tax expense, including non-deductible expenses, allowed expenses, and tax-exempt income. The Bank's current tax payable was ETB 6,029,075,603 for 2024, compared to ETB 6,217,082,758 in 2023.",
+        "data_types_present": [
+          "headings",
+          "lists",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          ". B",
+          "2023.B",
+          "2024.B",
+          "22.92%",
+          "28.32%",
+          "30%",
+          "4,501,837,873 b",
+          "5,337,094 B",
+          "9,357,089,365 B"
+        ]
+      },
+      {
+        "title": "(50) EQUITY",
+        "page_start": 152,
+        "page_end": 153,
+        "summary": "The Bank's equity consists of capital owned by the Ethiopian government, legal and statutory reserves, CBE NOOR reserve for Mudarabah contracts, and accumulated profit/loss. The accumulated profit represents 75% of net profit not yet paid to the government, with future dividends payable to the government also recorded in this account.",
+        "data_types_present": [
+          "headings",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          ". b",
+          "25%",
+          "75%",
+          "CBE",
+          "ETB 13,088,047,869",
+          "ETB 16,510,200,162",
+          "ETB 40,000,000,000",
+          "Federal Democratic Republic",
+          "National Bank of Ethiopia"
+        ]
+      },
+      {
+        "title": "(51) COMMITMENTS AND CONTINGENT LIABILITIES",
+        "page_start": 153,
+        "page_end": 153,
+        "summary": "The Bank has significant commitments and contingent liabilities related to guarantees and letters of credit. At year-end, total commitments amounted to NGN 51.77 billion, while contingent liabilities totaled NGN 191.64 billion. These financial instruments expose the Bank to potential future payments depending on customer performance and default scenarios.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "34,727,836,042 B"
+        ]
+      },
+      {
+        "title": "(52) RELATED PARTIES",
+        "page_start": 154,
+        "page_end": 154,
+        "summary": "The Bank's key management personnel, including Board members and executives, received total remuneration of ETB 103,647,619 in 2024, up from ETB 55,908,236 in 2023. This includes short-term benefits, long-term benefits, post-employment benefits, and board fees. The Bank also provided loans totaling ETB 68,293,745 to executive management members in 2024, secured against properties being acquired by the borrowers.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          ". b",
+          "2,897,150 B",
+          "7%"
+        ]
+      },
+      {
+        "title": "(53) CBE NOOR",
+        "page_start": 155,
+        "page_end": 156,
+        "summary": "CBE NOOR reported revenue of 8,601,453,574 Ethiopian Birr for the year ended 30 June 2024, up from 5,952,350,537 Birr in the previous year. The company's profit before taxation was 1,972,034,412 Birr, compared to 1,710,932,400 Birr in 2023. Total expenses for the year were 6,629,419,161 Birr, including significant costs for employee salaries and benefits, as well as general expenses.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "4,165,748,029 M",
+          "CBE"
+        ]
+      },
+      {
+        "title": "CBE NOOR",
+        "page_start": 156,
+        "page_end": 156,
+        "summary": "CBE NOOR is a section title with no additional content provided. The document only contains the heading \"CBE NOOR\" without any accompanying text or data.",
+        "data_types_present": [
+          "headings"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "CBE"
+        ]
+      },
+      {
+        "title": "STATEMENTS OF FINANCIAL POSITION AS AT 30 JUNE 2024 (IN ETHIOPIAN BIRR)",
+        "page_start": 156,
+        "page_end": 157,
+        "summary": "The statement of financial position as at 30 June 2024 shows total assets of 132,648,054,218 Ethiopian Birr, an increase from 101,141,801,942 Birr in 2023. Total liabilities and equity also increased to 132,648,054,218 Birr from 101,141,801,942 Birr, with significant growth in CBE Noor deposits and paid-up capital. The report includes detailed breakdowns of assets, liabilities, and equity components, with notes provided for specific items.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "CBE"
+        ]
+      },
+      {
+        "title": "(a) CASH AND CASH EQUIVALENTS",
+        "page_start": 157,
+        "page_end": 157,
+        "summary": "The company's cash and cash equivalents increased from 13,622,361,949 ETB in 2023 to 17,597,589,086 ETB in 2024. This growth was driven by increases in cash on hand, payment and settlement account, and NBE statutory reserve account. The largest increase was in the payment and settlement account, which grew by 1,601,656,466 ETB.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "NBE"
+        ]
+      },
+      {
+        "title": "(b) CBE NOOR FINANCING",
+        "page_start": 157,
+        "page_end": 157,
+        "summary": "The CBE Noor Financing section shows a significant increase in gross financing from 2023 to 2024, with net financing rising to 37,989,627,869 ETB. The report explains Islamic banking practices, including Murabaha financing and IFB Export Pre-Shipment Facility, which comply with Sharia law by avoiding interest-based lending.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          ". M",
+          "CBE"
+        ]
+      },
+      {
+        "title": "(c) RECEIVABLES",
+        "page_start": 157,
+        "page_end": 158,
+        "summary": "The receivables section shows a total of 67,864,856,665 in receivables as of June 30, 2024, compared to 62,937,621,580 in 2023. The largest component is the receivable from the Treasury Department, which increased from 62,800,806,857 to 67,684,009,377. Other receivables include foreign receivables, employee salary advances, and other receivables, with foreign receivables showing the largest increase.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "CBE"
+        ]
+      },
+      {
+        "title": "(d) CBE NOOR DEPOSIT",
+        "page_start": 158,
+        "page_end": 158,
+        "summary": "The CBE Noor Deposit includes Wadiah, Amanah, and Mudarabah savings and fixed time deposit accounts. Wadiah is a safekeeping contract, Amanah is a trust deposit, and Mudarabah accounts offer potentially higher returns without principal guarantees. As of June 30, 2024, the total deposits amounted to 116,558,985,459 Egyptian pounds.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          ". M",
+          "CBE"
+        ]
+      },
+      {
+        "title": "(e) PROFIT EQUALIZATION RESERVE (PER)",
+        "page_start": 158,
+        "page_end": 158,
+        "summary": "The Profit Equalization Reserve (PER) increased from 22,579,948 at the beginning of the period to 25,924,887 by June 30, 2024. This reserve is periodically deducted from the Net Income of the pool to smooth out profit payouts for mudarabah investment deposit customers when returns fall below market rates or customer expectations.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "3,806,457 B"
+        ]
+      },
+      {
+        "title": "(f) INVESTMENT RISK RESERVE (IRR)",
+        "page_start": 158,
+        "page_end": 158,
+        "summary": "The Investment Risk Reserve (IRR) increased from 1,795,122 at the beginning of the period to 4,632,736 by the end of the period. This reserve is periodically deducted from mudarabah investment depositors' shares to offset potential losses from write-offs and investment losses. The additional IRR during the period was 2,837,614.",
+        "data_types_present": [
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "1,245,318 B"
+        ]
+      },
+      {
+        "title": "(54) EVENTS AFTER THE REPORTING PERIOD",
+        "page_start": 159,
+        "page_end": 159,
+        "summary": "The Bank increased its paid-up capital by ETB 54,000,000,000 after the reporting period, which is a non-adjusting event. The Ethiopian government introduced significant changes to the foreign exchange rate regime, which is expected to materially affect the Bank's future financial results. The Ministry of Finance issued new Government Bonds to address CBE's non-performing lending to state-owned enterprises.",
+        "data_types_present": [
+          "headings",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "CBE",
+          "ETB 54,000,000,000.",
+          "Ministry of Finance"
+        ]
+      },
+      {
+        "title": "(55) DATE OF AUTHORIZATION",
+        "page_start": 159,
+        "page_end": 159,
+        "summary": "The financial statements were authorized for issue by the Board of Directors of the Bank on October 10, 2024. This authorization date is recorded as part of the official documentation of the financial statements.",
+        "data_types_present": [
+          "headings",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          "October 10, 2024"
+        ]
+      },
+      {
+        "title": "CONTENTS OF THE ANNEX",
+        "page_start": 160,
+        "page_end": 161,
+        "summary": "The annex contains the Independent Auditor's Report, Directors' Responsibility Statement, and consolidated and separate financial statements including profit or loss, financial position, changes in equity, and cash flows. It also includes notes to both consolidated and separate financial statements, spanning pages 10 to 144. The annex is concluded with an image and some numerical data.",
+        "data_types_present": [
+          "figures",
+          "headings",
+          "tables",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": []
+      },
+      {
+        "title": "P：CBETETAA",
+        "page_start": 161,
+        "page_end": 161,
+        "summary": "This section contains contact information and social media links for the Commercial Bank of Ethiopia, including email addresses, website URLs, and social media handles. It also includes an image and references to the bank's YouTube channel. The section concludes with the bank's name and the number 146.",
+        "data_types_present": [
+          "figures",
+          "headings",
+          "text"
+        ],
+        "child_sections": [],
+        "key_entities": [
+          ".m",
+          "Commercial Bank of Ethiopia",
+          "cbe"
+        ]
+      }
+    ],
+    "key_entities": [
+      ", B",
+      ", b",
+      ", m",
+      ",b",
+      ". B",
+      ". M",
+      ". b",
+      ".B",
+      ".M",
+      ".m",
+      "0%",
+      "0.5%",
+      "0.7%",
+      "1 b",
+      "1 m",
+      "1,052,782,471,633 b",
+      "1,245,318 B",
+      "1,257,422,659 B",
+      "1,372,462,678 B",
+      "1,602,002,931 B",
+      "1,609,439,252 B",
+      "1,838,768,673 B",
+      "1,854,451,043 B",
+      "1,870,728,685 B",
+      "1,913,275,397 B",
+      "1,942 b",
+      "1.0%",
+      "1.1 billion",
+      "1.3 million",
+      "1.6 billion",
+      "1.7%",
+      "1.9%"
+    ]
+  }
+}
