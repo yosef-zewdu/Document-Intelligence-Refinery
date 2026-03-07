@@ -54,6 +54,38 @@ _ORG_RE = re.compile(
 def _norm(s: str) -> str:
     return _WS.sub(" ", (s or "").strip())
 
+ROMAN_LIST_RE = re.compile(r"^\s*[ivxlcdm]+[\)\.]\s+", re.IGNORECASE)
+LISTLIKE_RE   = re.compile(r"^\s*(?:\d+(?:\.\d+)*[\)\.]|[•\-])\s+")
+MOTTO_RE      = re.compile(r".+!\s*$")  # short slogan lines often end with !
+
+
+NUM_LEVEL_RE = re.compile(r"^\s*(\d+(?:\.\d+)*)\b")
+
+def _heading_level(title: str) -> int:
+    t = _norm(title)
+    m = NUM_LEVEL_RE.match(t)
+    if m:
+        return len(m.group(1).split("."))
+    # ALL CAPS short headings -> level 1
+    alpha = sum(c.isalpha() for c in t)
+    if alpha >= 6:
+        upper = sum(c.isupper() for c in t if c.isalpha())
+        if upper / alpha > 0.88 and len(t.split()) <= 10:
+            return 1
+    return 2
+
+
+def _is_valid_section_heading(title: str) -> bool:
+    t = _norm(title)
+    if not t:
+        return False
+    # reject list items pretending to be headings
+    if ROMAN_LIST_RE.match(t) or LISTLIKE_RE.match(t):
+        return False
+    # reject motto-like short exclamations
+    if MOTTO_RE.match(t) and len(t.split()) <= 12:
+        return False
+    return True
 
 def _extract_entities(text: str, max_per_type: int = 5) -> List[str]:
     """Simple pattern-based entity extraction."""
@@ -362,6 +394,38 @@ class PageIndexBuilder:
         self.use_llm = use_llm
         self.summary_provider = SummaryProvider(use_llm=use_llm)
 
+    def _finalize_node(
+        self,
+        node: SectionNode,
+        node_text: Dict[int, List[str]],
+        node_entity_text: Dict[int, List[str]],
+        node_types: Dict[int, set],
+    ) -> None:
+        txt = " ".join(node_text.get(id(node), []))
+        types = node_types.get(id(node), set())
+
+        # compute data_types_present without making fake LDUs
+        dt = set()
+        for t in types:
+            if t == "table": dt.add("tables")
+            elif t == "figure": dt.add("figures")
+            elif t == "list": dt.add("lists")
+            elif t == "heading": dt.add("headings")
+            elif t == "text": dt.add("text")
+        node.data_types_present = sorted(dt)
+
+        if txt:
+            node.summary = self.summary_provider.summarize(
+                node.title, _snippet(txt, 3000), node.data_types_present
+            )
+
+        ent_src = " ".join(node_entity_text.get(id(node), []))
+        if ent_src:
+            node.key_entities = _extract_entities(ent_src, max_per_type=8)
+
+        for ch in node.child_sections:
+            self._finalize_node(ch, node_text, node_entity_text, node_types)
+
     def build(self, doc_id: str, ldus: List[LDU]) -> PageIndex:
         """
         Main entry point: build a PageIndex tree from LDUs.
@@ -372,35 +436,96 @@ class PageIndexBuilder:
           - Build SectionNodes with summaries, entities, data_types
           - Wrap in a root node
         """
-        # Step 1: Identify section boundaries and assign children
-        sections = self._segment_into_sections(ldus)
 
-        # Step 2: Build SectionNode tree
-        child_nodes: List[SectionNode] = []
-        for sec in sections:
-            node = self._build_section_node(sec)
-            child_nodes.append(node)
-
-        # Step 3: Root node encompasses all pages
+        ldus = sorted(ldus, key=lambda l: (min(l.page_refs) if l.page_refs else 10**9))
+        
+        # 1) root node
         all_pages = set()
         for ldu in ldus:
             all_pages.update(ldu.page_refs)
         min_page = min(all_pages) if all_pages else 1
         max_page = max(all_pages) if all_pages else 1
 
-        all_text = " ".join(_norm(ldu.content) for ldu in ldus if ldu.content)
-
         root = SectionNode(
             title="Document Root",
             page_start=min_page,
             page_end=max_page,
-            summary=self.summary_provider.summarize(
-                "Full Document", _snippet(all_text, 500), _data_types_in_chunks(ldus)
-            ),
-            data_types_present=_data_types_in_chunks(ldus),
-            child_sections=child_nodes,
-            key_entities=_extract_entities(all_text, max_per_type=8),
+            summary=None,
+            data_types_present=[],
+            child_sections=[],
+            key_entities=[]
         )
+
+        # 2) stack of (level, node)
+        stack: List[Tuple[int, SectionNode]] = [(0, root)]
+        current_node = root
+
+        # 3) buffers for each node
+        node_text = defaultdict(list)
+        node_entity_text = defaultdict(list)
+        node_types = defaultdict(set)
+
+        # 4) scan LDUs and build hierarchy
+        for ldu in ldus:
+            if ldu.chunk_type == "heading" and _is_valid_section_heading(ldu.content):
+                lvl = _heading_level(ldu.content)
+
+                node = SectionNode(
+                    title=_norm(ldu.content),
+                    page_start=min(ldu.page_refs) if ldu.page_refs else min_page,
+                    page_end=max(ldu.page_refs) if ldu.page_refs else min_page,
+                    summary=None,
+                    data_types_present=[],
+                    child_sections=[],
+                    key_entities=[]
+                )
+
+                # pop until parent level < lvl
+                while stack and stack[-1][0] >= lvl:
+                    stack.pop()
+
+                parent = stack[-1][1] if stack else root
+
+                # merge repeated consecutive headings (optional but very effective)
+                if parent.child_sections and _norm(parent.child_sections[-1].title).lower() == _norm(node.title).lower():
+                    parent.child_sections[-1].page_end = max(parent.child_sections[-1].page_end, node.page_end)
+                    current_node = parent.child_sections[-1]
+                    stack.append((lvl, current_node))
+                    continue
+
+                parent.child_sections.append(node)
+                stack.append((lvl, node))
+                current_node = node
+                continue
+
+            # assign non-heading LDU to current section
+            if ldu.page_refs:
+                current_node.page_start = min(current_node.page_start, min(ldu.page_refs))
+                current_node.page_end = max(current_node.page_end, max(ldu.page_refs))
+
+            node_types[id(current_node)].add(ldu.chunk_type)
+
+            if ldu.chunk_type in ("text", "list", "table"):
+                node_text[id(current_node)].append(_norm(ldu.content))
+            if ldu.chunk_type in ("text", "list"):
+                node_entity_text[id(current_node)].append(_norm(ldu.content))
+            if ldu.chunk_type == "figure":
+                cap = (ldu.metadata.get("caption") or "")
+                if cap:
+                    node_text[id(current_node)].append(_norm(cap))
+                    node_entity_text[id(current_node)].append(_norm(cap))
+
+        # 5) finalize summaries/entities/types recursively
+        
+        self._finalize_node(root, node_text, node_entity_text, node_types)
+
+        # 6) root summary/entities from whole doc (capped)
+        all_text = " ".join(_norm(ldu.content) for ldu in ldus if ldu.content)
+        root.summary = self.summary_provider.summarize(
+            "Full Document", _snippet(all_text, 1500), _data_types_in_chunks(ldus)
+        )
+        root.data_types_present = _data_types_in_chunks(ldus)
+        root.key_entities = _extract_entities(all_text, max_per_type=8)
 
         return PageIndex(doc_id=doc_id, root=root)
 
@@ -412,8 +537,10 @@ class PageIndexBuilder:
         Each section is a dict with 'title', 'heading_ldu', 'children'.
         If no headings exist, creates page-range based sections.
         """
-        heading_indices = [i for i, ldu in enumerate(ldus) if ldu.chunk_type == "heading"]
-
+        heading_indices = [
+            i for i, ldu in enumerate(ldus)
+            if ldu.chunk_type == "heading" and _is_valid_section_heading(ldu.content)
+        ]
         if not heading_indices:
             # Fallback: create sections by page ranges (every 5 pages)
             return self._segment_by_pages(ldus, pages_per_section=5)
@@ -501,7 +628,7 @@ class PageIndexBuilder:
         entities = _extract_entities(all_text)
 
         # Summary
-        summary = self.summary_provider.summarize(title, all_text, data_types)
+        summary = summary = self.summary_provider.summarize(title, _snippet(all_text, 3000), data_types)
 
         return SectionNode(
             title=title,
