@@ -99,3 +99,9 @@ chunking:
   split_on_headers: true
   split_on_tables: true
   min_chunk_size: 100
+
+# Stage 4: PageIndex Builder
+indexer:
+  use_llm: false                   # Set to true to use HF Inference API for summaries
+  pages_per_section_fallback: 5    # If no headings found, group by this many pages
+  summary_model: "Qwen/Qwen2.5-7B-Instruct"
