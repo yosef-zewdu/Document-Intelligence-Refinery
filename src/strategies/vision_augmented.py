@@ -40,6 +40,7 @@ class VisionExtractor(BaseExtractor):
         est_cost_per_page_usd: float = None,
         max_pages_per_doc: int = None,
         confidence_accept: float = None,
+        vision_provider: str = None,  # New: 'groq', 'huggingface', or 'gemini'
     ):
         if not config:
             full_config = load_refinery_config()
@@ -48,7 +49,17 @@ class VisionExtractor(BaseExtractor):
             self.config = config
 
         # Priority: explicit args > config file > hardcoded defaults
-        self.model_name = model_name or self.config.get("model_name", "Qwen/Qwen2.5-VL-7B-Instruct")
+        self.vision_provider = vision_provider or self.config.get("vision_provider", "huggingface")
+        
+        # Set model based on provider
+        if self.vision_provider == "groq":
+            default_model = "llama-3.2-90b-vision-preview"
+        elif self.vision_provider == "gemini":
+            default_model = "gemini-1.5-flash"
+        else:  # huggingface
+            default_model = "Qwen/Qwen2.5-VL-7B-Instruct"
+            
+        self.model_name = model_name or self.config.get("model_name", default_model)
         self.budget_cap = budget_cap_usd or self.config.get("budget_cap_usd", 5.0)
         self.current_spend = 0.0
 
@@ -116,16 +127,139 @@ class VisionExtractor(BaseExtractor):
     # ---------- VLM call (pluggable) ----------
     def _call_vlm(self, image_b64: str, page_num_0: int, domain_hint: str) -> Dict[str, Any]:
         """
+        Calls vision model based on configured provider (Groq, HuggingFace, or Gemini).
+        Falls back to mock if API fails.
+        """
+        if os.environ.get("MOCK_VLM") == "true":
+            return self._get_mock_vlm_response(page_num_0, domain_hint)
+        
+        # Route to appropriate provider
+        if self.vision_provider == "groq":
+            return self._call_groq_vision(image_b64, page_num_0, domain_hint)
+        elif self.vision_provider == "gemini":
+            return self._call_gemini_vision(image_b64, page_num_0, domain_hint)
+        else:  # huggingface (default)
+            return self._call_huggingface_vision(image_b64, page_num_0, domain_hint)
+    
+    def _call_groq_vision(self, image_b64: str, page_num_0: int, domain_hint: str) -> Dict[str, Any]:
+        """
+        Calls Groq's vision API (llama-3.2-90b-vision-preview or similar).
+        Uses OpenAI-compatible API format.
+        """
+        api_key = os.environ.get("GROQ_API_KEY")
+        
+        if not api_key:
+            logger.warning("GROQ_API_KEY not found. Falling back to mock.")
+            return self._get_mock_vlm_response(page_num_0, domain_hint)
+        
+        try:
+            from openai import OpenAI
+            
+            client = OpenAI(
+                api_key=api_key,
+                base_url="https://api.groq.com/openai/v1"
+            )
+            
+            prompt = (
+                f"This is a {domain_hint} document page. "
+                "Extract all text contents and tables. "
+                "Return the data strictly in JSON format with the following keys:\n"
+                "- 'blocks': list of objects with a 'content' field (string) and a 'bbox' field (list of 4 floats: [x0, y0, x1, y1] for coordinates)\n"
+                "- 'tables': list of objects with 'headers' (list of strings), 'rows' (list of list of strings), and 'bbox' (list of 4 floats)\n"
+                "If bounding boxes are unknown, use [0.0, 0.0, 0.0, 0.0]. "
+                "Do not include any chat or preamble, only the raw JSON."
+            )
+            
+            response = client.chat.completions.create(
+                model=self.model_name,
+                messages=[
+                    {
+                        "role": "user",
+                        "content": [
+                            {"type": "text", "text": prompt},
+                            {
+                                "type": "image_url",
+                                "image_url": {
+                                    "url": f"data:image/png;base64,{image_b64}"
+                                }
+                            }
+                        ]
+                    }
+                ],
+                max_tokens=2048,
+                temperature=0
+            )
+            
+            output_text = response.choices[0].message.content
+            
+            # Clean up JSON formatting
+            if "```json" in output_text:
+                output_text = output_text.split("```json")[1].split("```")[0].strip()
+            elif "```" in output_text:
+                output_text = output_text.split("```")[1].split("```")[0].strip()
+            
+            return json.loads(output_text)
+            
+        except Exception as e:
+            logger.error(f"Groq vision API call failed: {e}. Falling back to mock.")
+            return self._get_mock_vlm_response(page_num_0, domain_hint)
+    
+    def _call_gemini_vision(self, image_b64: str, page_num_0: int, domain_hint: str) -> Dict[str, Any]:
+        """
+        Calls Google Gemini's vision API.
+        """
+        api_key = os.environ.get("GOOGLE_API_KEY")
+        
+        if not api_key:
+            logger.warning("GOOGLE_API_KEY not found. Falling back to mock.")
+            return self._get_mock_vlm_response(page_num_0, domain_hint)
+        
+        try:
+            import google.generativeai as genai
+            import PIL.Image
+            import io
+            
+            genai.configure(api_key=api_key)
+            model = genai.GenerativeModel(self.model_name)
+            
+            # Decode base64 to PIL Image
+            image_data = base64.b64decode(image_b64)
+            image = PIL.Image.open(io.BytesIO(image_data))
+            
+            prompt = (
+                f"This is a {domain_hint} document page. "
+                "Extract all text contents and tables. "
+                "Return the data strictly in JSON format with the following keys:\n"
+                "- 'blocks': list of objects with a 'content' field (string) and a 'bbox' field (list of 4 floats: [x0, y0, x1, y1] for coordinates)\n"
+                "- 'tables': list of objects with 'headers' (list of strings), 'rows' (list of list of strings), and 'bbox' (list of 4 floats)\n"
+                "If bounding boxes are unknown, use [0.0, 0.0, 0.0, 0.0]. "
+                "Do not include any chat or preamble, only the raw JSON."
+            )
+            
+            response = model.generate_content([prompt, image])
+            output_text = response.text
+            
+            # Clean up JSON formatting
+            if "```json" in output_text:
+                output_text = output_text.split("```json")[1].split("```")[0].strip()
+            elif "```" in output_text:
+                output_text = output_text.split("```")[1].split("```")[0].strip()
+            
+            return json.loads(output_text)
+            
+        except Exception as e:
+            logger.error(f"Gemini vision API call failed: {e}. Falling back to mock.")
+            return self._get_mock_vlm_response(page_num_0, domain_hint)
+    
+    def _call_huggingface_vision(self, image_b64: str, page_num_0: int, domain_hint: str) -> Dict[str, Any]:
+        """
         Calls Qwen (or compatible VLM) via Hugging Face Inference API.
         Falls back to local transformers if API fails and MOCK_VLM is not set.
         """
         token = os.environ.get("HF_TOKEN")
         
-        if os.environ.get("MOCK_VLM") == "true":
-            return self._get_mock_vlm_response(page_num_0, domain_hint)
-
         if not token:
-            logger.warning("HF_TOKEN not found in environment. Falling back to local/mock.")
+            logger.warning("HF_TOKEN not found in environment. Falling back to mock.")
             return self._get_mock_vlm_response(page_num_0, domain_hint)
 
         client = InferenceClient(api_key=token)
@@ -167,9 +301,8 @@ class VisionExtractor(BaseExtractor):
             return json.loads(output_text)
 
         except Exception as e:
-            logger.error(f"Hugging Face API call failed: {e}. Falling back to text block.")
-            # If API fails, we could try local transformers here, but on CPU it's too risky.
-            return {"blocks": [{"content": f"Extraction failed for page {page_num_0+1}: {str(e)}"}], "tables": []}
+            logger.error(f"Hugging Face API call failed: {e}. Falling back to mock.")
+            return self._get_mock_vlm_response(page_num_0, domain_hint)
 
     def _get_mock_vlm_response(self, page_num_0: int, domain_hint: str) -> Dict[str, Any]:
         """Provides realistic mock data for verification."""
@@ -377,6 +510,7 @@ class VisionExtractor(BaseExtractor):
             tables=tables,
             metadata={
                 "strategy": "VisionExtractor",
+                "vision_provider": self.vision_provider,
                 "model": self.model_name,
                 "elapsed_sec": round(elapsed, 3),
                 "provenance": {

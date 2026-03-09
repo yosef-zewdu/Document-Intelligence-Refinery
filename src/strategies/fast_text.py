@@ -101,7 +101,10 @@ class FastTextExtractor(BaseExtractor):
         return 0.0
 
     def _compute_confidence_metadata(self, pdf_path: str, blocks: List[TextBlock], tables: List[TableStructure], warnings: List[str]) -> ConfidenceMetadata:
-        """Richer confidence calculation for Strategy A."""
+        """
+        Enhanced confidence calculation with all required signals from spec.
+        Implements multi-signal scoring as documented in DOMAIN_NOTES.md and extraction_rules.yaml
+        """
         score = 1.0
         signals = {}
         
@@ -111,45 +114,94 @@ class FastTextExtractor(BaseExtractor):
                 signals["total_pages"] = total_pages
                 
                 if total_pages == 0:
-                    return ConfidenceMetadata(score=0.0, method="heuristic", warnings=["Zero pages"])
+                    return ConfidenceMetadata(
+                        score=0.0, 
+                        method="multi_signal_heuristic", 
+                        warnings=["Zero pages"]
+                    )
 
-                page_scores = []
+                # Collect metrics from all pages
+                page_char_counts = []
+                densities = []
+                image_ratios = []
+                font_metadata_found = False
+                
                 for page in pdf.pages:
+                    # Signal 1: Character count per page
                     text = page.extract_text() or ""
                     char_count = len(text)
+                    page_char_counts.append(char_count)
+                    
+                    # Signal 2: Character density
                     page_area = float(page.width * page.height)
                     density = char_count / page_area if page_area > 0 else 0
+                    densities.append(density)
                     
-                    image_area = sum([float(img["width"] * img["height"]) for img in page.images])
+                    # Signal 3: Image area ratio
+                    image_area = sum([float(img.get("width", 0) * img.get("height", 0)) for img in page.images])
                     image_ratio = image_area / page_area if page_area > 0 else 0
+                    image_ratios.append(image_ratio)
                     
-                    page_score = 1.0
-                    if density < 0.0005: 
-                        page_score -= 0.5
-                    if image_ratio > 0.5: 
-                        page_score -= 0.4
-                    page_scores.append(max(0.0, page_score))
+                    # Signal 4: Font metadata presence
+                    if not font_metadata_found:
+                        chars = page.chars
+                        if chars and any(c.get("fontname") for c in chars):
+                            font_metadata_found = True
                 
-                avg_page_score = sum(page_scores) / total_pages
-                score = avg_page_score
-                signals["avg_page_score"] = round(avg_page_score, 4)
-                signals["density_check"] = "pass" if any(s > 0.5 for s in page_scores) else "fail"
-        except:
+                # Calculate averages
+                avg_char_count = sum(page_char_counts) / total_pages
+                avg_density = sum(densities) / total_pages
+                avg_image_ratio = sum(image_ratios) / total_pages
+                
+                # Store signals
+                signals["avg_char_count_per_page"] = round(avg_char_count, 2)
+                signals["avg_char_density"] = round(avg_density, 6)
+                signals["avg_image_ratio"] = round(avg_image_ratio, 4)
+                signals["font_metadata_present"] = font_metadata_found
+                
+                # Multi-signal confidence scoring (weights from extraction_rules.yaml)
+                # Thresholds: char_count >= 100, density >= 0.0005, image_ratio <= 0.50, font_metadata = true
+                char_count_signal = 1.0 if avg_char_count >= 100 else (avg_char_count / 100)
+                char_density_signal = 1.0 if avg_density >= 0.0005 else (avg_density / 0.0005)
+                image_ratio_signal = 1.0 if avg_image_ratio <= 0.50 else max(0.0, 1.0 - (avg_image_ratio - 0.50))
+                font_metadata_signal = 1.0 if font_metadata_found else 0.0
+                
+                # Weighted combination (30% image, 25% char count, 25% density, 20% font)
+                score = (
+                    0.30 * max(0.0, min(1.0, image_ratio_signal)) +
+                    0.25 * max(0.0, min(1.0, char_count_signal)) +
+                    0.25 * max(0.0, min(1.0, char_density_signal)) +
+                    0.20 * font_metadata_signal
+                )
+                
+                signals["char_count_signal"] = round(char_count_signal, 4)
+                signals["char_density_signal"] = round(char_density_signal, 4)
+                signals["image_ratio_signal"] = round(image_ratio_signal, 4)
+                signals["font_metadata_signal"] = round(font_metadata_signal, 4)
+                
+                # Add warnings for failed checks
+                if avg_char_count < 100:
+                    warnings.append(f"Low character count per page ({avg_char_count:.0f} < 100)")
+                if avg_density < 0.0005:
+                    warnings.append(f"Low character density ({avg_density:.6f} < 0.0005) - likely scanned")
+                if avg_image_ratio > 0.50:
+                    warnings.append(f"High image area ratio ({avg_image_ratio:.2%} > 50%) - text extraction incomplete")
+                if not font_metadata_found:
+                    warnings.append("No font metadata detected - may indicate scanned content")
+                    
+        except Exception as e:
+            logger.error(f"Confidence calculation failed: {e}")
             score = 0.0
-            warnings.append("Could not compute confidence signals")
+            warnings.append(f"Confidence calculation error: {str(e)}")
 
-        # Penalize for warnings
-        if warnings:
-            score -= 0.1 * len(warnings)
-            
-        # Penalize for zero blocks
+        # Penalize for zero content
         if not blocks and not tables:
             score = 0.0
             warnings.append("No content extracted")
 
         return ConfidenceMetadata(
             score=max(0.0, min(1.0, score)),
-            method="heuristic",
+            method="multi_signal_heuristic",
             warnings=warnings,
             signals=signals
         )

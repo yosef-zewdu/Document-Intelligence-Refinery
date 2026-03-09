@@ -9,6 +9,9 @@ from src.models import (
     ExtractionCost
 )
 
+# Mark all tests in this module as slow
+pytestmark = pytest.mark.slow
+
 @pytest.fixture
 def layout_extractor():
     return LayoutExtractor()

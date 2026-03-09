@@ -1,0 +1,13 @@
+You have gathered information using tools. Now synthesize a clear, direct answer to the user's original question.
+
+Tool Results Summary:
+{tool_results}
+
+CRITICAL INSTRUCTIONS:
+1. Provide a direct answer to the user's question based on the tool results above
+2. Cite specific page numbers from the tool results
+3. Do NOT say "I'll help you" or "Let me search" - you already have the information
+4. Do NOT make any more tool calls
+5. Format: [Your answer based on the evidence] (Source: Page X, Page Y)
+
+Now provide your final answer:

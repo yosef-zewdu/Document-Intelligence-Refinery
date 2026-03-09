@@ -685,10 +685,14 @@ class ChunkingEngine:
             "caption_bbox": cap_bbox.model_dump() if cap_bbox else None,
         }
 
-        # For retrieval, keep content minimal; caption stays in metadata (but you can also copy caption into content if desired)
+        # IMPORTANT: Include caption in content for searchability
+        # The caption contains critical information (e.g., "Known Gaps in Current Judicial Layer")
+        # that must be searchable in the vector store
+        content = f"[IMAGE: {cap_text}]" if cap_text else "[IMAGE]"
+        
         return self._make_ldu(
             doc_id=doc_id,
-            content="[IMAGE]",
+            content=content,
             chunk_type="figure",
             page_refs=[it.page_num],
             bbox=bb,
