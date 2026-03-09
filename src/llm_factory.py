@@ -29,6 +29,11 @@ def get_llm_config() -> Dict[str, Any]:
         config["api_key"] = os.getenv("OPENROUTER_API_KEY")
         config["available"] = bool(config["api_key"])
         config["base_url"] = "https://openrouter.ai/api/v1"
+    elif provider == "groq":
+        config["model"] = os.getenv("GROQ_MODEL", "llama-3.2-90b-vision-preview")
+        config["api_key"] = os.getenv("GROQ_API_KEY")
+        config["available"] = bool(config["api_key"])
+        config["base_url"] = "https://api.groq.com/openai/v1"
     elif provider == "ollama":
         config["model"] = os.getenv("OLLAMA_MODEL", "deepseek-coder")
         config["base_url"] = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
@@ -51,7 +56,7 @@ def get_llm_config() -> Dict[str, Any]:
 def get_llm(provider: Optional[str] = None, model: Optional[str] = None, api_key: Optional[str] = None):
     """
     Returns a LangChain ChatModel instance based on the provider.
-    Supported providers: 'gemini', 'openrouter', 'ollama', 'huggingface'.
+    Supported providers: 'gemini', 'openrouter', 'groq', 'ollama', 'huggingface'.
     
     Args:
         provider: LLM provider name (defaults to LLM_PROVIDER env var)
@@ -78,6 +83,22 @@ def get_llm(provider: Optional[str] = None, model: Optional[str] = None, api_key
         
         return ChatOpenAI(
             base_url="https://openrouter.ai/api/v1",
+            openai_api_key=key,
+            model=model,
+            temperature=0,
+        )
+    
+    elif provider == "groq":
+        model = model or os.getenv("GROQ_MODEL", "llama-3.2-90b-vision-preview")
+        key = api_key or os.getenv("GROQ_API_KEY")
+        
+        if not key:
+            raise ValueError("GROQ_API_KEY not set in environment")
+        
+        logger.info(f"Using Groq model: {model}")
+        
+        return ChatOpenAI(
+            base_url="https://api.groq.com/openai/v1",
             openai_api_key=key,
             model=model,
             temperature=0,
@@ -118,4 +139,4 @@ def get_llm(provider: Optional[str] = None, model: Optional[str] = None, api_key
         )
     
     else:
-        raise ValueError(f"Unsupported LLM provider: {provider}. Supported: openrouter, ollama, gemini, huggingface")
+        raise ValueError(f"Unsupported LLM provider: {provider}. Supported: openrouter, groq, ollama, gemini, huggingface")

@@ -9,8 +9,10 @@ triage:
   thresholds:
     scanned_density_max: 0.0005    # Max char density to be considered a scan
     digital_density_min: 0.0010    # Min char density to be considered native digital
-    multi_column_x_offsets: 200  # Min unique x-starts per page to flag as multi-column
-    table_heavy_word_ratio: 0.4    # Ratio of words in tables (heuristic)
+    multi_column_x_offsets: 300    # Min unique x-starts per page to flag as multi-column (academic papers)
+    table_heavy_word_ratio: 0.4    # Min ratio of words in tables to be table-heavy (financial reports)
+    figure_heavy_image_ratio: 0.3  # Min image ratio to be considered figure-heavy
+    form_fillable_field_ratio: 0.1 # Min form fields per page to be considered form-fillable
     
   # Domain Keyword Weighted Lists
   # Used by the TriageAgent to classify document domain (domain_hint)
@@ -86,7 +88,8 @@ extraction:
     strategy_b_threshold: 0.70     # If confidence < 0.7, flag for human/VLM review
     
   vision_extractor:
-    model_name: "Qwen/Qwen2.5-VL-7B-Instruct"
+    vision_provider: "groq"        # Vision provider: 'groq', 'huggingface', or 'gemini'
+    model_name: "llama-3.2-90b-vision-preview"  # Model name (provider-specific)
     budget_cap_usd: 5.0
     est_cost_per_page_usd: 0.03
     max_pages_per_doc: 12
