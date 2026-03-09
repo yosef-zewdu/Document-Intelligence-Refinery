@@ -34,12 +34,18 @@ def skip_if_no_data():
 def test_financial_query_routes_to_structured_query(skip_if_no_data):
     """Test that structured_query tool exists and works for financial queries"""
     
-    # Create agent
-    agent = QueryAgent(
-        doc_id=DOC_ID,
-        page_index_path=PAGE_INDEX_PATH,
-        max_iterations=3
-    )
+    # Mock get_llm to avoid requiring API keys in CI
+    with patch('src.agents.query_agent.get_llm') as mock_get_llm:
+        mock_llm = MagicMock()
+        mock_llm.bind_tools = MagicMock(return_value=mock_llm)
+        mock_get_llm.return_value = mock_llm
+        
+        # Create agent
+        agent = QueryAgent(
+            doc_id=DOC_ID,
+            page_index_path=PAGE_INDEX_PATH,
+            max_iterations=3
+        )
     
     # Get the tools
     tool_names = [tool.name for tool in agent.tools]
@@ -59,12 +65,18 @@ def test_financial_query_routes_to_structured_query(skip_if_no_data):
 def test_content_query_routes_to_semantic_search(skip_if_no_data):
     """Test that semantic_search tool exists and works for content queries"""
     
-    # Create agent
-    agent = QueryAgent(
-        doc_id=DOC_ID,
-        page_index_path=PAGE_INDEX_PATH,
-        max_iterations=3
-    )
+    # Mock get_llm to avoid requiring API keys in CI
+    with patch('src.agents.query_agent.get_llm') as mock_get_llm:
+        mock_llm = MagicMock()
+        mock_llm.bind_tools = MagicMock(return_value=mock_llm)
+        mock_get_llm.return_value = mock_llm
+        
+        # Create agent
+        agent = QueryAgent(
+            doc_id=DOC_ID,
+            page_index_path=PAGE_INDEX_PATH,
+            max_iterations=3
+        )
     
     # Get the tools
     tool_names = [tool.name for tool in agent.tools]
@@ -86,12 +98,18 @@ def test_content_query_routes_to_semantic_search(skip_if_no_data):
 def test_structure_query_routes_to_pageindex(skip_if_no_data):
     """Test that pageindex_navigate tool exists and works for structure queries"""
     
-    # Create agent
-    agent = QueryAgent(
-        doc_id=DOC_ID,
-        page_index_path=PAGE_INDEX_PATH,
-        max_iterations=3
-    )
+    # Mock get_llm to avoid requiring API keys in CI
+    with patch('src.agents.query_agent.get_llm') as mock_get_llm:
+        mock_llm = MagicMock()
+        mock_llm.bind_tools = MagicMock(return_value=mock_llm)
+        mock_get_llm.return_value = mock_llm
+        
+        # Create agent
+        agent = QueryAgent(
+            doc_id=DOC_ID,
+            page_index_path=PAGE_INDEX_PATH,
+            max_iterations=3
+        )
     
     # Get the tools
     tool_names = [tool.name for tool in agent.tools]
@@ -114,12 +132,18 @@ def test_structure_query_routes_to_pageindex(skip_if_no_data):
 def test_all_three_tools_available(skip_if_no_data):
     """Test that all three Stage 5 tools are available"""
     
-    # Create agent
-    agent = QueryAgent(
-        doc_id=DOC_ID,
-        page_index_path=PAGE_INDEX_PATH,
-        max_iterations=3
-    )
+    # Mock get_llm to avoid requiring API keys in CI
+    with patch('src.agents.query_agent.get_llm') as mock_get_llm:
+        mock_llm = MagicMock()
+        mock_llm.bind_tools = MagicMock(return_value=mock_llm)
+        mock_get_llm.return_value = mock_llm
+        
+        # Create agent
+        agent = QueryAgent(
+            doc_id=DOC_ID,
+            page_index_path=PAGE_INDEX_PATH,
+            max_iterations=3
+        )
     
     # Get tool names
     tool_names = [tool.name for tool in agent.tools]
@@ -144,12 +168,18 @@ def test_all_three_tools_available(skip_if_no_data):
 def test_query_type_tool_mapping(skip_if_no_data, query_type, expected_tool, query_text):
     """Test that different query types map to expected tools"""
     
-    # Create agent
-    agent = QueryAgent(
-        doc_id=DOC_ID,
-        page_index_path=PAGE_INDEX_PATH,
-        max_iterations=3
-    )
+    # Mock get_llm to avoid requiring API keys in CI
+    with patch('src.agents.query_agent.get_llm') as mock_get_llm:
+        mock_llm = MagicMock()
+        mock_llm.bind_tools = MagicMock(return_value=mock_llm)
+        mock_get_llm.return_value = mock_llm
+        
+        # Create agent
+        agent = QueryAgent(
+            doc_id=DOC_ID,
+            page_index_path=PAGE_INDEX_PATH,
+            max_iterations=3
+        )
     
     # Verify the expected tool exists
     tool_names = [tool.name for tool in agent.tools]
@@ -159,12 +189,18 @@ def test_query_type_tool_mapping(skip_if_no_data, query_type, expected_tool, que
 def test_tool_descriptions_are_clear(skip_if_no_data):
     """Test that tool descriptions clearly indicate their purpose"""
     
-    # Create agent
-    agent = QueryAgent(
-        doc_id=DOC_ID,
-        page_index_path=PAGE_INDEX_PATH,
-        max_iterations=3
-    )
+    # Mock get_llm to avoid requiring API keys in CI
+    with patch('src.agents.query_agent.get_llm') as mock_get_llm:
+        mock_llm = MagicMock()
+        mock_llm.bind_tools = MagicMock(return_value=mock_llm)
+        mock_get_llm.return_value = mock_llm
+        
+        # Create agent
+        agent = QueryAgent(
+            doc_id=DOC_ID,
+            page_index_path=PAGE_INDEX_PATH,
+            max_iterations=3
+        )
     
     # Check each tool has a clear description
     for tool in agent.tools:
@@ -188,12 +224,18 @@ def test_tool_descriptions_are_clear(skip_if_no_data):
 def test_tool_parameters_are_valid(skip_if_no_data):
     """Test that tool parameters are properly defined"""
     
-    # Create agent
-    agent = QueryAgent(
-        doc_id=DOC_ID,
-        page_index_path=PAGE_INDEX_PATH,
-        max_iterations=3
-    )
+    # Mock get_llm to avoid requiring API keys in CI
+    with patch('src.agents.query_agent.get_llm') as mock_get_llm:
+        mock_llm = MagicMock()
+        mock_llm.bind_tools = MagicMock(return_value=mock_llm)
+        mock_get_llm.return_value = mock_llm
+        
+        # Create agent
+        agent = QueryAgent(
+            doc_id=DOC_ID,
+            page_index_path=PAGE_INDEX_PATH,
+            max_iterations=3
+        )
     
     # Check each tool has valid parameters
     for tool in agent.tools:
@@ -216,12 +258,18 @@ def test_tool_parameters_are_valid(skip_if_no_data):
 def test_tool_output_format_consistency(skip_if_no_data):
     """Test that all tools return consistent JSON format"""
     
-    # Create agent
-    agent = QueryAgent(
-        doc_id=DOC_ID,
-        page_index_path=PAGE_INDEX_PATH,
-        max_iterations=3
-    )
+    # Mock get_llm to avoid requiring API keys in CI
+    with patch('src.agents.query_agent.get_llm') as mock_get_llm:
+        mock_llm = MagicMock()
+        mock_llm.bind_tools = MagicMock(return_value=mock_llm)
+        mock_get_llm.return_value = mock_llm
+        
+        # Create agent
+        agent = QueryAgent(
+            doc_id=DOC_ID,
+            page_index_path=PAGE_INDEX_PATH,
+            max_iterations=3
+        )
     
     # Test each tool returns valid JSON
     for tool in agent.tools:
@@ -244,12 +292,18 @@ def test_tool_output_format_consistency(skip_if_no_data):
 def test_tool_error_handling(skip_if_no_data):
     """Test that tools handle errors gracefully"""
     
-    # Create agent
-    agent = QueryAgent(
-        doc_id=DOC_ID,
-        page_index_path=PAGE_INDEX_PATH,
-        max_iterations=3
-    )
+    # Mock get_llm to avoid requiring API keys in CI
+    with patch('src.agents.query_agent.get_llm') as mock_get_llm:
+        mock_llm = MagicMock()
+        mock_llm.bind_tools = MagicMock(return_value=mock_llm)
+        mock_get_llm.return_value = mock_llm
+        
+        # Create agent
+        agent = QueryAgent(
+            doc_id=DOC_ID,
+            page_index_path=PAGE_INDEX_PATH,
+            max_iterations=3
+        )
     
     # Test each tool with edge cases
     for tool in agent.tools:

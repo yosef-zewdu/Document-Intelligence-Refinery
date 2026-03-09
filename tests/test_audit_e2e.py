@@ -41,13 +41,26 @@ def agent(doc_id, page_index_path):
     if not os.path.exists(page_index_path):
         pytest.skip(f"Page index not found: {page_index_path}")
     
-    return QueryAgent(
-        doc_id=doc_id,
-        page_index_path=page_index_path,
-        llm_provider="openrouter",
-        llm_model="arcee-ai/trinity-large-preview:free",
-        max_iterations=3
-    )
+    # Mock get_llm to avoid requiring API keys in CI
+    with patch('src.agents.query_agent.get_llm') as mock_get_llm:
+        # Create a mock LLM that supports tool binding
+        mock_llm = MagicMock()
+        mock_llm.bind_tools = MagicMock(return_value=mock_llm)
+        mock_llm.invoke = MagicMock(return_value=Mock(content="Test response"))
+        mock_get_llm.return_value = mock_llm
+        
+        agent = QueryAgent(
+            doc_id=doc_id,
+            page_index_path=page_index_path,
+            llm_provider="openrouter",
+            llm_model="arcee-ai/trinity-large-preview:free",
+            max_iterations=3
+        )
+        
+        # Keep the mock LLM attached to the agent for test use
+        agent._mock_llm = mock_llm
+        
+        return agent
 
 
 # ============================================================================
