@@ -153,13 +153,43 @@ class LayoutExtractor(BaseExtractor):
                 elif self._is_picture_item(item):
                     label = "[IMAGE]"
                     # Pictures often have labels or captions instead of primary text
-                    txt = txt or getattr(item, "caption", None) or "(no caption)"
+                    caption_text = txt or getattr(item, "caption", None) or ""
+                    
+                    # Try to extract OCR text from the image itself
+                    ocr_text = ""
+                    try:
+                        # Get the image and extract text using OCR
+                        img = item.get_image(doc)
+                        if img:
+                            # Use Docling's OCR or pytesseract to extract text from image
+                            try:
+                                import pytesseract
+                                ocr_text = pytesseract.image_to_string(img).strip()
+                                if ocr_text:
+                                    logger.debug(f"Extracted OCR text from image: {len(ocr_text)} chars")
+                            except ImportError:
+                                logger.debug("pytesseract not available, skipping OCR text extraction")
+                            except Exception as e:
+                                logger.debug(f"OCR extraction failed: {e}")
+                    except Exception as e:
+                        logger.debug(f"Failed to get image for OCR: {e}")
+                    
+                    # Combine caption and OCR text
+                    if caption_text and ocr_text:
+                        txt = f"{caption_text}\n[OCR Text]: {ocr_text}"
+                    elif ocr_text:
+                        txt = f"[OCR Text]: {ocr_text}"
+                    elif caption_text:
+                        txt = caption_text
+                    else:
+                        txt = "(no caption or text)"
 
                 if txt is not None:
                     txt_norm = (f"{label} " if label else "") + " ".join(txt.split())
                     
                     # Try to extract and save the actual image if it's a picture or formula
                     image_path_msg = ""
+                    ocr_text_for_save = ""
                     if label in ("[IMAGE]", "[FORMULA]"):
                         try:
                             # docling 2.x method to get image of an item
@@ -174,6 +204,17 @@ class LayoutExtractor(BaseExtractor):
                                 img_path = os.path.join(img_dir, safe_name)
                                 img.save(img_path)
                                 image_path_msg = f" [Saved Image: {img_path}]"
+                                
+                                # Save OCR text alongside image if available
+                                if label == "[IMAGE]" and ocr_text:
+                                    ocr_text_for_save = ocr_text
+                                    txt_file_path = img_path.replace('.png', '_ocr.txt')
+                                    try:
+                                        with open(txt_file_path, 'w', encoding='utf-8') as f:
+                                            f.write(ocr_text)
+                                        logger.debug(f"Saved OCR text to {txt_file_path}")
+                                    except Exception as e:
+                                        logger.debug(f"Failed to save OCR text: {e}")
                         except Exception as e:
                             logger.debug(f"Failed to extract image for {label}: {e}")
                             image_path_msg = f" [Image extraction failed]"
