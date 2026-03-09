@@ -56,7 +56,7 @@ class QueryAgent:
         page_index_path: str,
         llm_provider: str = "openrouter",
         llm_model: str = "arcee-ai/trinity-large-preview:free",  # Fast free model with tool support
-        max_iterations: int = 3  # Limit iterations
+        max_iterations: int = 100  # Increased from 3 to allow more tool calls
     ):
         self.doc_id = doc_id
         self.page_index_path = page_index_path
@@ -112,14 +112,15 @@ class QueryAgent:
             return json.dumps(sections, indent=2)
         
         @tool
-        def semantic_search(query: str, top_k: int = 3) -> str:
+        def semantic_search(query: str, top_k: int = 3, include_images: bool = False) -> str:
             """
             Search document content using vector similarity.
-            Returns relevant chunks with page numbers.
+            Returns relevant chunks with page numbers and bounding boxes.
             
             Args:
                 query: The search query
                 top_k: Number of results (default: 3, max: 5)
+                include_images: If True, include base64-encoded images for vision models (default: False)
             """
             # Limit top_k for speed
             top_k = min(top_k, 5)
@@ -131,8 +132,32 @@ class QueryAgent:
                 result = {
                     "content": content[:300],  # Truncate for speed
                     "page": metadata.get("page_min", -1),
-                    "hash": metadata.get("content_hash", "")[:16]
+                    "hash": metadata.get("content_hash", "")[:16],
+                    "bbox": metadata.get("bbox"),  # Include bbox for spatial traceability
+                    "chunk_type": metadata.get("chunk_type", "text")  # Include chunk type
                 }
+                
+                # If this is a figure chunk, include image path and caption
+                if metadata.get("chunk_type") == "figure":
+                    image_path = metadata.get("image_path")
+                    result["image_path"] = image_path
+                    result["caption"] = metadata.get("caption")
+                    
+                    # Optionally include base64 image data for vision models
+                    if include_images and image_path:
+                        try:
+                            import base64
+                            from pathlib import Path
+                            if Path(image_path).exists():
+                                with open(image_path, 'rb') as img_file:
+                                    img_data = base64.b64encode(img_file.read()).decode('utf-8')
+                                    # Only include if image is reasonably small (< 500KB)
+                                    if len(img_data) < 500000:
+                                        result["image_base64"] = img_data[:1000] + "..." if len(img_data) > 1000 else img_data
+                                        result["image_note"] = "Image available but truncated for context size"
+                        except Exception as e:
+                            result["image_error"] = f"Could not load image: {str(e)}"
+                
                 search_results.append(result)
             
             return json.dumps(search_results, indent=2)
@@ -173,18 +198,54 @@ class QueryAgent:
         
         def should_continue(state: AgentState):
             """Decide whether to continue or end"""
-            last_message = state["messages"][-1]
+            messages = state["messages"]
+            last_message = messages[-1] if messages else None
             iterations = state.get("iterations", 0)
             
-            # Stop if max iterations reached
-            if iterations >= self.max_iterations:
+            # If there are no tool calls, we're done (LLM has given final answer)
+            if not last_message or not hasattr(last_message, "tool_calls") or not last_message.tool_calls:
                 return "end"
             
-            # If there are no tool calls, we're done
-            if not hasattr(last_message, "tool_calls") or not last_message.tool_calls:
-                return "end"
+            # If we've hit max iterations, force one final answer generation
+            if iterations >= self.max_iterations:
+                return "final_answer"
             
             return "continue"
+        
+        def generate_final_answer(state: AgentState):
+            """Force LLM to generate final answer without tools"""
+            messages = state["messages"]
+            
+            # Extract tool results from messages to create a summary
+            tool_results = []
+            for msg in messages:
+                if hasattr(msg, "content") and hasattr(msg, "name"):
+                    # This is a tool message
+                    tool_results.append(f"Tool '{msg.name}' returned: {msg.content[:500]}")
+            
+            # Create a strong instruction to synthesize the answer
+            synthesis_prompt = f"""You have gathered information using tools. Now synthesize a clear, direct answer to the user's original question.
+
+Tool Results Summary:
+{chr(10).join(tool_results[-3:])}  
+
+CRITICAL INSTRUCTIONS:
+1. Provide a direct answer to the user's question based on the tool results above
+2. Cite specific page numbers from the tool results
+3. Do NOT say "I'll help you" or "Let me search" - you already have the information
+4. Do NOT make any more tool calls
+5. Format: [Your answer based on the evidence] (Source: Page X, Page Y)
+
+Now provide your final answer:"""
+            
+            final_instruction = HumanMessage(content=synthesis_prompt)
+            
+            # Use LLM without tools for final answer
+            response = self.llm.invoke(messages + [final_instruction])
+            
+            return {
+                "messages": messages + [final_instruction, response]
+            }
         
         def call_model(state: AgentState):
             """Call the LLM with tools"""
@@ -222,10 +283,20 @@ class QueryAgent:
                         if isinstance(data, list):
                             for item in data:
                                 if "page" in item and "hash" in item:
+                                    # Parse bbox if present
+                                    bbox_data = item.get("bbox")
+                                    bbox = None
+                                    if bbox_data and isinstance(bbox_data, dict):
+                                        try:
+                                            bbox = BBox(**bbox_data)
+                                        except Exception:
+                                            # If bbox parsing fails, continue without it
+                                            pass
+                                    
                                     provenance_list.append(ProvenanceChain(
                                         document_name=self.doc_id,
                                         page_number=item.get("page", 1),
-                                        bbox=None,
+                                        bbox=bbox,  # Now includes actual bbox
                                         content_hash=item.get("hash", "")
                                     ))
                     except:
@@ -239,6 +310,7 @@ class QueryAgent:
         # Add nodes
         workflow.add_node("agent", call_model)
         workflow.add_node("tools", call_tools)
+        workflow.add_node("final_answer", generate_final_answer)
         workflow.add_node("extract_provenance", extract_provenance)
         
         # Set entry point
@@ -250,12 +322,16 @@ class QueryAgent:
             should_continue,
             {
                 "continue": "tools",
+                "final_answer": "final_answer",
                 "end": "extract_provenance"
             }
         )
         
         # Tools always go back to agent
         workflow.add_edge("tools", "agent")
+        
+        # Final answer goes to provenance extraction
+        workflow.add_edge("final_answer", "extract_provenance")
         
         # Provenance extraction ends
         workflow.add_edge("extract_provenance", END)
@@ -268,26 +344,43 @@ class QueryAgent:
         if mode == "audit":
             return f"""You are verifying a claim about document: {self.doc_id}
 
-CRITICAL RULES:
-- Use pageindex_navigate to find relevant sections first
-- Use semantic_search to find evidence in those sections
-- Use structured_query for numbers/facts
-- Be CONCISE - you have max {self.max_iterations} tool calls
-- Return "VERIFIED" with page number if found, or "NOT FOUND" if not
+WORKFLOW:
+1. Use pageindex_navigate to find relevant sections
+2. Use semantic_search to find evidence in those sections
+3. Use structured_query for numbers/facts if needed
+4. After gathering evidence, provide your verification
 
-Format: "VERIFIED: [evidence] (Page X)" or "NOT FOUND"
+CRITICAL RULES:
+- You have max {self.max_iterations} tool calls
+- After using tools, SYNTHESIZE the results into a clear verification
+- Return "VERIFIED: [evidence] (Page X)" if found
+- Return "NOT FOUND" if evidence doesn't support the claim
+
+DO NOT just make tool calls without providing a final answer!
 """
         else:
             return f"""You are answering questions about document: {self.doc_id}
 
-CRITICAL RULES:
-- Use pageindex_navigate to find relevant sections
-- Use semantic_search for content within sections
-- Use structured_query for numbers/facts
-- Be CONCISE - max {self.max_iterations} tool calls
-- Always cite page numbers
+WORKFLOW:
+1. Use pageindex_navigate to find relevant sections
+2. Use semantic_search for content within sections
+3. Use structured_query for numbers/facts if needed
+4. After gathering evidence, SYNTHESIZE a clear answer
 
-Answer format: [answer] (Source: Page X)
+CRITICAL RULES:
+- You have max {self.max_iterations} tool calls
+- After using tools, you MUST provide a direct answer based on the tool results
+- Always cite page numbers from the tool results
+- DO NOT say "I'll help you" or "Let me search" - just answer based on evidence
+- DO NOT make tool calls without eventually providing an answer
+
+IMPORTANT - Image Handling:
+- If semantic_search returns results with "chunk_type": "figure", these are images/diagrams
+- Image results include "image_path" (local file path) and "caption" (description)
+- You can reference the caption and page number in your answer
+- Note: Images are stored locally and not directly viewable in chat
+
+Answer format: [Direct answer based on evidence] (Source: Page X, Page Y)
 """
     
     def audit(self, claim: str, timeout: int = 30) -> Dict[str, Any]:
@@ -399,15 +492,36 @@ Answer format: [answer] (Source: Page X)
             # Cancel timeout
             signal.alarm(0)
             
-            # Extract final answer
-            final_message = result["messages"][-1]
-            answer = final_message.content if hasattr(final_message, "content") else str(final_message)
+            # Extract final answer - look for the last AIMessage without tool calls
+            answer = ""
+            for msg in reversed(result["messages"]):
+                # Skip system messages and tool messages
+                if isinstance(msg, (SystemMessage, HumanMessage)):
+                    continue
+                    
+                # Look for AIMessage with content but no tool calls
+                if isinstance(msg, AIMessage):
+                    if hasattr(msg, "content") and msg.content:
+                        # Skip if this message has tool calls (it's not the final answer)
+                        if hasattr(msg, "tool_calls") and msg.tool_calls:
+                            continue
+                        answer = msg.content
+                        break
+                # Fallback: check for any message with content attribute
+                elif hasattr(msg, "content") and msg.content and not hasattr(msg, "tool_calls"):
+                    answer = msg.content
+                    break
+            
+            # If still no answer, provide a helpful fallback
+            if not answer or answer.strip() == "":
+                answer = "No answer was generated. The LLM may not support tool calling properly. Try using a different model (e.g., Groq or GPT-4)."
             
             return {
                 "answer": answer,
                 "provenance": [p.model_dump() for p in result.get("provenance", [])],
                 "doc_id": self.doc_id,
-                "iterations": result.get("iterations", 0)
+                "iterations": result.get("iterations", 0),
+                "messages": [str(m)[:200] for m in result.get("messages", [])]  # Debug info
             }
             
         except TimeoutError:
