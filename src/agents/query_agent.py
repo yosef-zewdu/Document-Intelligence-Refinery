@@ -19,6 +19,7 @@ All answers include full provenance: document_name, page_number, bbox, content_h
 import json
 from typing import List, Optional, Dict, Any
 from typing_extensions import TypedDict
+from pathlib import Path
 
 from langgraph.graph import StateGraph, END
 from langchain_core.messages import BaseMessage, HumanMessage, AIMessage, SystemMessage
@@ -30,6 +31,20 @@ from src.agents.indexer import PageIndexQuery
 from src.agents.vector_store import VectorStoreManager
 from src.agents.fact_extractor import EnhancedFactTableExtractor
 from src.llm_factory import get_llm
+
+
+# Prompt file paths
+PROMPTS_DIR = Path(__file__).parent / "prompts"
+QUERY_SYSTEM_PROMPT_PATH = PROMPTS_DIR / "query_agent_system.txt"
+AUDIT_SYSTEM_PROMPT_PATH = PROMPTS_DIR / "query_agent_audit.txt"
+SYNTHESIS_PROMPT_PATH = PROMPTS_DIR / "query_agent_synthesis.txt"
+
+
+def load_prompt(path: Path) -> str:
+    """Load prompt template from file"""
+    if not path.exists():
+        raise FileNotFoundError(f"Prompt file not found: {path}")
+    return path.read_text().strip()
 
 
 class AgentState(TypedDict):
@@ -221,22 +236,17 @@ class QueryAgent:
             for msg in messages:
                 if hasattr(msg, "content") and hasattr(msg, "name"):
                     # This is a tool message
-                    tool_results.append(f"Tool '{msg.name}' returned: {msg.content[:500]}")
+                    tool_name = msg.name if hasattr(msg, "name") else "unknown_tool"
+                    tool_content = msg.content[:800] if hasattr(msg, "content") else ""
+                    tool_results.append(f"=== Tool: {tool_name} ===\n{tool_content}")
             
-            # Create a strong instruction to synthesize the answer
-            synthesis_prompt = f"""You have gathered information using tools. Now synthesize a clear, direct answer to the user's original question.
-
-Tool Results Summary:
-{chr(10).join(tool_results[-3:])}  
-
-CRITICAL INSTRUCTIONS:
-1. Provide a direct answer to the user's question based on the tool results above
-2. Cite specific page numbers from the tool results
-3. Do NOT say "I'll help you" or "Let me search" - you already have the information
-4. Do NOT make any more tool calls
-5. Format: [Your answer based on the evidence] (Source: Page X, Page Y)
-
-Now provide your final answer:"""
+            # Load synthesis prompt template
+            synthesis_template = load_prompt(SYNTHESIS_PROMPT_PATH)
+            
+            # Format the prompt with tool results
+            synthesis_prompt = synthesis_template.format(
+                tool_results="\n".join(tool_results[-3:]) if tool_results else "No tool results available"
+            )
             
             final_instruction = HumanMessage(content=synthesis_prompt)
             
@@ -339,49 +349,18 @@ Now provide your final answer:"""
         return workflow.compile()
     
     def _get_system_prompt(self, mode: str) -> str:
-        """Get optimized system prompt"""
-        
+        """Get optimized system prompt from external file"""
+
         if mode == "audit":
-            return f"""You are verifying a claim about document: {self.doc_id}
-
-WORKFLOW:
-1. Use pageindex_navigate to find relevant sections
-2. Use semantic_search to find evidence in those sections
-3. Use structured_query for numbers/facts if needed
-4. After gathering evidence, provide your verification
-
-CRITICAL RULES:
-- You have max {self.max_iterations} tool calls
-- After using tools, SYNTHESIZE the results into a clear verification
-- Return "VERIFIED: [evidence] (Page X)" if found
-- Return "NOT FOUND" if evidence doesn't support the claim
-
-DO NOT just make tool calls without providing a final answer!
-"""
+            template = load_prompt(AUDIT_SYSTEM_PROMPT_PATH)
         else:
-            return f"""You are answering questions about document: {self.doc_id}
+            template = load_prompt(QUERY_SYSTEM_PROMPT_PATH)
 
-WORKFLOW:
-1. Use pageindex_navigate to find relevant sections
-2. Use semantic_search for content within sections
-3. Use structured_query for numbers/facts if needed
-4. After gathering evidence, SYNTHESIZE a clear answer
-
-CRITICAL RULES:
-- You have max {self.max_iterations} tool calls
-- After using tools, you MUST provide a direct answer based on the tool results
-- Always cite page numbers from the tool results
-- DO NOT say "I'll help you" or "Let me search" - just answer based on evidence
-- DO NOT make tool calls without eventually providing an answer
-
-IMPORTANT - Image Handling:
-- If semantic_search returns results with "chunk_type": "figure", these are images/diagrams
-- Image results include "image_path" (local file path) and "caption" (description)
-- You can reference the caption and page number in your answer
-- Note: Images are stored locally and not directly viewable in chat
-
-Answer format: [Direct answer based on evidence] (Source: Page X, Page Y)
-"""
+        # Format the template with instance variables
+        return template.format(
+            doc_id=self.doc_id,
+            max_iterations=self.max_iterations
+        )
     
     def audit(self, claim: str, timeout: int = 30) -> Dict[str, Any]:
         """

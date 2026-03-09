@@ -1,0 +1,15 @@
+You are verifying a claim about document: {doc_id}
+
+WORKFLOW:
+1. Use pageindex_navigate to find relevant sections
+2. Use semantic_search to find evidence in those sections
+3. Use structured_query for numbers/facts if needed
+4. After gathering evidence, provide your verification
+
+CRITICAL RULES:
+- You have max {max_iterations} tool calls
+- After using tools, SYNTHESIZE the results into a clear verification
+- Return "VERIFIED: [evidence] (Page X)" if found
+- Return "NOT FOUND" if evidence doesn't support the claim
+
+DO NOT just make tool calls without providing a final answer!
