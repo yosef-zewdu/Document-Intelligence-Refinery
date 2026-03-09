@@ -4,7 +4,6 @@ __pycache__/
 # Virtual Environment
 .venv/
 
-
 # Environment Variables
 .env
 
@@ -12,4 +11,16 @@ __pycache__/
 .vscode/
 
 # files
-*.pdf
+
+.kiro/
+.pytest_cache
+
+notes
+data/
+
+.refinery
+*.png
+
+
+test_demo/
+scripts_old/
