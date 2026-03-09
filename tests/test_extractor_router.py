@@ -72,14 +72,15 @@ def test_router_escalation_path(extraction_router, monkeypatch):
     doc = extraction_router.route_and_extract(pdf_path, profile)
     
     # Should have escalated to Strategy B and stopped there
-    assert "LayoutExtractor" in doc.metadata["strategy"]
+    strategy = doc.metadata.get("strategy", "")
+    assert "LayoutExtractor" in strategy, f"Expected LayoutExtractor in strategy, got: {strategy}"
     
     # Check ledger for both attempts
     with open(extraction_router.ledger_path, "r") as f:
         log_lines = [json.loads(line) for line in f if line.strip()]
-        strategies = [entry["strategy"] for entry in log_lines if entry["doc_id"] == "router_escalation_test"]
-        assert "Strategy A" in strategies
-        assert "Strategy B" in strategies
+        strategies = [entry["strategy_used"] for entry in log_lines if entry["doc_id"] == "router_escalation_test"]
+        assert "Strategy A" in strategies, f"Expected Strategy A in ledger, got: {strategies}"
+        assert "Strategy B" in strategies, f"Expected Strategy B in ledger, got: {strategies}"
 
 def test_router_vision_path(extraction_router):
     # Set mock env var for vision extractor
